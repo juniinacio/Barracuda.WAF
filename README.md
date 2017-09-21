@@ -1,7 +1,7 @@
 ## ![logo][] Barracuda.WAF ##
 [logo]: assets/Barracuda_Networks.png
 
-Just a simple PowerShell module for managing your Barracuda Web Application Firewall (WAF).
+PowerShell module for managing your Barracuda Web Application Firewall (WAF).
 
 ### Prerequisites ###
 In order to use this module you need to have PowerShell installed on your system, which you can download [here][download-powershell].
