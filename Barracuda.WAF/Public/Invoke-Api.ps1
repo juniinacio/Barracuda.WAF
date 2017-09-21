@@ -84,9 +84,9 @@ function Invoke-Api
             if ($PSBoundParameters.ContainsKey('Headers')) {
                 $Headers.GetEnumerator() |
                 ForEach-Object {
-                    if (-not $newHeaders.ContainsKey($_.Key)) {
+                    # if (-not $newHeaders.ContainsKey($_.Key)) {
                         $newHeaders.$_.Key = $_.Value
-                    }
+                    # }
                 }
             }
 
