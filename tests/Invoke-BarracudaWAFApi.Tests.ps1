@@ -23,7 +23,7 @@ InModuleScope Barracuda.WAF {
                 password="admin"
             }
 
-            Invoke-BarracudaWAFApi -Path "restapi/v1/login" -Data $postData -Method Post
+            Invoke-BarracudaWAFApi -Path "restapi/v1/login" -PostData $postData -Method Post
 
             $jsonData = $postData | ConvertTo-Json -Depth 4
 

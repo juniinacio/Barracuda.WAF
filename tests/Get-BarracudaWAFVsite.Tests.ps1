@@ -2,7 +2,7 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "Get-BarracudaWAFVirtualService" {
+    Describe "Get-BarracudaWAFVsite" {
         BeforeAll {
             $Script:BWAF_URI = "https://waf1.com"
 
@@ -11,26 +11,26 @@ InModuleScope Barracuda.WAF {
             }
         }
 
-        It "should retrieve a collection of virtual services" {
+        It "should retrieve a collection of vsites" {
             Mock Invoke-RestMethod {}
 
-            Get-BarracudaWAFVirtualService
+            Get-BarracudaWAFVsite
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/virtual_services" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/vsites" -and $Headers.ContainsKey('Authorization')}
         }
 
-        It "should retrieve a single virtual service" {
+        It "should retrieve a single vsite" {
             Mock Invoke-RestMethod {}
             
-            Get-BarracudaWAFVirtualService -VirtualServiceId "demo_service"
+            Get-BarracudaWAFVsite -VsiteId "default"
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/virtual_services/demo_service" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/vsites/default" -and $Headers.ContainsKey('Authorization')}
         }
 
         It "should support pipeline input" {
             Mock Invoke-RestMethod {}
             
-            "demo_service1", "demo_service2" | Get-BarracudaWAFVirtualService
+            "demo_vsite1", "demo_vsite2" | Get-BarracudaWAFVsite
 
             Assert-MockCalled Invoke-RestMethod -Times 2
         }

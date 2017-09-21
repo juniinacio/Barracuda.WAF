@@ -19,13 +19,15 @@
     The role this cmdlet belongs to
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
+.LINK
+    https://campus.barracuda.com/product/webapplicationfirewall/article/WAF/RESTAPIVsites/
 #>
-function Get-BarracudaWAFVirtualService {
+function Get-Vsite {
     [CmdletBinding()]
     [Alias()]
-    [OutputType([String])]
+    [OutputType([PSCustomObject])]
     Param (
-        # Id help description
+        # VsiteId help description
         [Parameter(
             Mandatory = $false,
             Position = 0,
@@ -33,16 +35,16 @@ function Get-BarracudaWAFVirtualService {
         )]
         [ValidateNotNullOrEmpty()]        
         [String[]]
-        $Id
+        $VsiteId
     )
-
+    
     process {
-        if ($PSBoundParameters.ContainsKey('Id')) {
-            foreach ($virtualService in $Id) {
-                Invoke-API -Path $('/restapi/v1/virtual_services/{0}' -f $virtualService)
+        if ($PSBoundParameters.ContainsKey('VsiteId')) {
+            foreach ($Vsite in $VsiteId) {
+                Invoke-API -Path $('/restapi/v1/vsites/{0}' -f $Vsite)
             }
         } else {
-            Invoke-API -Path '/restapi/v1/virtual_services'
+            Invoke-API -Path '/restapi/v1/vsites'
         }
     }
 }

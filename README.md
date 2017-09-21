@@ -30,21 +30,22 @@ To use the module you first need to import it in your current PowerShell session
 Import-Module -Name Barracuda.WAF
 ```
 
+To get retrieve a list of virtual services, enter:
+```powershell
+# Set the url of your WAF
+Set-BarracudaWAFApiUrl -Url "http://192.168.0.1:8000"
+
+# Connect to WAF
+Connect-Account -Credential (Get-Credential)
+
+# Retrieve a list of virtual services
+Get-BarracudaWAFVirtualService
+
+# Disconnect
+Disconnect-BarracudaWAFAccount
+```
+
 To view all cmdlets, enter:
 ```powershell
 Get-Command -Module Barracuda.WAF
 ```
-
-Sample usage:
-```powershell
-# Set Url to your Barracuda Web Application Firewall
-Set-BarracudaWAFApiUrl -Url "http://192.168.0.1:8000"
-
-# Add connection account
-Add-BarracudaWAFAccount -Credential (Get-Credential)
-
-# Retrieve a list of virtual services
-Get-BarracudaWAFVirtualService
-```
-
-Here more...

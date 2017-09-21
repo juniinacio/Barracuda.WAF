@@ -19,8 +19,10 @@
     The role this cmdlet belongs to
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
+.LINK
+    https://campus.barracuda.com/product/webapplicationfirewall/article/WAF/RESTAPIv1/
 #>
-function Add-Account {
+function Connect-Account {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
@@ -46,7 +48,7 @@ function Add-Account {
             username = $Credential.GetNetworkCredential().UserName
             password = $Credential.GetNetworkCredential().Password
         }
-        $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v1/login' -Method Post -Data $postData
+        $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v1/login' -Method Post -PostData $postData
     }
 
     end {

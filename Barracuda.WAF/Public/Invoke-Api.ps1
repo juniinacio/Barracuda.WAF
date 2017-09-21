@@ -41,7 +41,7 @@ function Invoke-Api
         [Parameter(Mandatory=$false, ValueFromPipeline=$true)]
         [ValidateNotNullOrEmpty()]
         [Hashtable]
-        $Data,
+        $PostData,
         
         # Method help description
         [Parameter(Mandatory=$false)]
@@ -95,10 +95,10 @@ function Invoke-Api
             
             $requestParameters.Headers = $newHeaders
 
-            if ($PSBoundParameters.ContainsKey('Data')) {
-                $requestParameters.Body = $Data | ConvertTo-Json -Depth 4
+            if ($PSBoundParameters.ContainsKey('PostData')) {
+                $requestParameters.Body = $PostData | ConvertTo-Json -Depth 4
                 
-                Write-Debug "Body: `n$($Data | ConvertTo-Json -Depth 4)`n"
+                Write-Debug "Body: `n$($PostData | ConvertTo-Json -Depth 4)`n"
             }
             
             if ($PSBoundParameters.ContainsKey('Method')) {

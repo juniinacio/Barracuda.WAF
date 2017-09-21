@@ -2,7 +2,7 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "Add-BarracudaWAFAccount" {
+    Describe "Connect-BarracudaWAFAccount" {
         BeforeAll {
             $Script:BWAF_URI = "https://waf1.com"
 
@@ -19,7 +19,7 @@ InModuleScope Barracuda.WAF {
 
             $jsonData = $data | ConvertTo-Json -Depth 4
 
-            Add-BarracudaWAFAccount -Credential $credentials
+            Connect-BarracudaWAFAccount -Credential $credentials
 
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/login" -and $Body -eq $jsonData }
         }
@@ -33,7 +33,7 @@ InModuleScope Barracuda.WAF {
 
             $Script:BWAF_TOKEN = $null
 
-            Add-BarracudaWAFAccount -Credential $credentials
+            Connect-BarracudaWAFAccount -Credential $credentials
 
             $Script:BWAF_TOKEN.token | Should Be "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
         }
