@@ -1,5 +1,5 @@
 ## Barracuda.WAF
-Just a simple Barracuda Web Application Firewall PowerShell Module.
+Just a simple PowerShell module for managing your Barracuda Web Application Firewall (WAF).
 
 
 ### Prerequisites ###
