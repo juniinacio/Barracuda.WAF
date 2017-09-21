@@ -4,7 +4,7 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 InModuleScope Barracuda.WAF {
     Describe "Add-BarracudaWAFAccount" {
         BeforeAll {
-            $Script:WAF_URI = "https://waf1.com"
+            $Script:BWAF_URI = "https://waf1.com"
 
             $credentials = New-Object System.Management.Automation.PSCredential ("root", $(ConvertTo-SecureString "R00t" -AsPlainText -Force))
         }
@@ -31,11 +31,11 @@ InModuleScope Barracuda.WAF {
                 }
             }
 
-            $Script:ACCESS_TOKEN = $null
+            $Script:BWAF_TOKEN = $null
 
             Add-BarracudaWAFAccount -Credential $credentials
 
-            $Script:ACCESS_TOKEN.token | Should Be "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
+            $Script:BWAF_TOKEN.token | Should Be "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
         }
     }
 }

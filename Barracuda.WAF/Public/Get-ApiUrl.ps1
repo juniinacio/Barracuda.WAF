@@ -27,6 +27,6 @@ function Get-ApiUrl {
     Param ()
     
     end {
-        $Script:WAF_URI
+        $Script:BWAF_URI
     }
 }

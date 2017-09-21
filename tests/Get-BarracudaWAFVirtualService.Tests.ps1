@@ -4,9 +4,9 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 InModuleScope Barracuda.WAF {
     Describe "Get-BarracudaWAFVirtualService" {
         BeforeAll {
-            $Script:WAF_URI = "https://waf1.com"
+            $Script:BWAF_URI = "https://waf1.com"
 
-            $Script:ACCESS_TOKEN = [PSCustomObject]@{
+            $Script:BWAF_TOKEN = [PSCustomObject]@{
                 token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
             }
         }

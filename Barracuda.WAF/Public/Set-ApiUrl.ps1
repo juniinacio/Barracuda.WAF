@@ -33,6 +33,6 @@ function Set-ApiUrl {
     )
     
     end {
-        $Script:WAF_URI = ([Uri]$Url).GetLeftPart([System.UriPartial]::Authority);
+        $Script:BWAF_URI = ([Uri]$Url).GetLeftPart([System.UriPartial]::Authority);
     }
 }

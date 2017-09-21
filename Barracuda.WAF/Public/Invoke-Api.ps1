@@ -59,7 +59,7 @@ function Invoke-Api
         try {
             $requestParameters = @{}
 
-            $builder = New-Object -TypeName 'System.UriBuilder' -ArgumentList $Script:WAF_URI
+            $builder = New-Object -TypeName 'System.UriBuilder' -ArgumentList $Script:BWAF_URI
             $builder.Path = $Path
             
             if ($PSBoundParameters.ContainsKey('Parameters')) {
@@ -76,8 +76,8 @@ function Invoke-Api
             $requestParameters.Uri = $builder.ToString()
 
             $newHeaders = $Script:DEFAULT_HEADERS
-            if ($Script:ACCESS_TOKEN -ne $null) {
-                $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:ACCESS_TOKEN.token))
+            if ($Script:BWAF_TOKEN -ne $null) {
+                $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
                 $newHeaders.Authorization = "Basic {0}" -f $encodedToken
             }
 

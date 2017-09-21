@@ -38,7 +38,7 @@ function Add-Account {
     )
 
     begin {
-        $Script:ACCESS_TOKEN = $null
+        $Script:BWAF_TOKEN = $null
     }
     
     process {
@@ -46,10 +46,10 @@ function Add-Account {
             username = $Credential.GetNetworkCredential().UserName
             password = $Credential.GetNetworkCredential().Password
         }
-        $Script:ACCESS_TOKEN = Invoke-API -Path '/restapi/v1/login' -Method Post -Data $postData
+        $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v1/login' -Method Post -Data $postData
     }
 
     end {
-        $Script:ACCESS_TOKEN
+        $Script:BWAF_TOKEN
     }
 }

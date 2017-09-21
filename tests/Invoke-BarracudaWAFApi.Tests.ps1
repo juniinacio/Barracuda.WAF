@@ -4,7 +4,7 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 InModuleScope Barracuda.WAF {
     Describe "Invoke-BarracudaWAFApi" {
         BeforeEach {
-            $Script:WAF_URI = "https://waf1.com"
+            $Script:BWAF_URI = "https://waf1.com"
         }
 
         It "should call the correct endpoint" {
@@ -33,7 +33,7 @@ InModuleScope Barracuda.WAF {
         It "should include the authorization header" {
             Mock Invoke-RestMethod {}
 
-            $Script:ACCESS_TOKEN = [PSCustomObject]@{
+            $Script:BWAF_TOKEN = [PSCustomObject]@{
                 token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
             }
 
@@ -45,11 +45,11 @@ InModuleScope Barracuda.WAF {
         It "should encode the token" {
             Mock Invoke-RestMethod {}
 
-            $Script:ACCESS_TOKEN = [PSCustomObject]@{
+            $Script:BWAF_TOKEN = [PSCustomObject]@{
                 token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
             }
 
-            $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:ACCESS_TOKEN.token))
+            $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
 
             Invoke-BarracudaWAFApi -Path "restapi/v1/vsites"
 
