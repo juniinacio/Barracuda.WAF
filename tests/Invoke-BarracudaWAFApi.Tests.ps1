@@ -56,7 +56,7 @@ InModuleScope Barracuda.WAF {
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/vsites" -and $Headers.ContainsKey('Authorization') -and $Headers.Authorization -eq "Basic $encodedToken"}
         }
 
-        It "should add the query string parameters" {
+        It "should add the query string parameter" {
             Mock Invoke-RestMethod {}
 
             $Script:BWAF_TOKEN = [PSCustomObject]@{
