@@ -27,7 +27,7 @@ InModuleScope Barracuda.WAF {
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/virtual_services/demo_service/content_rules/rule1/rg_servers/demo_server" -and $Headers.ContainsKey('Authorization')}
         }
 
-        It "should support pipeline input" {
+        It "should accept pipeline input" {
             Mock Invoke-RestMethod {}
             
             "demo_server1", "demo_server2" | Get-BarracudaWAFRuleGroupServer -VirtualServiceId 'demo_service' -RuleId 'rule1'

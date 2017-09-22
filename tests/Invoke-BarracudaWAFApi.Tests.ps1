@@ -7,7 +7,7 @@ InModuleScope Barracuda.WAF {
             $Script:BWAF_URI = "https://waf1.com"
         }
 
-        It "should call the correct endpoint" {
+        It "should generate the correct endpoint" {
             Mock Invoke-RestMethod {}
 
             Invoke-BarracudaWAFApi -Path "/restapi/v1/login"
@@ -15,7 +15,7 @@ InModuleScope Barracuda.WAF {
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/login" }
         }
 
-        It "should include the payload" {
+        It "should include the request body" {
             Mock Invoke-RestMethod {}
             
             $postData = @{
@@ -54,6 +54,20 @@ InModuleScope Barracuda.WAF {
             Invoke-BarracudaWAFApi -Path "restapi/v1/vsites"
 
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/vsites" -and $Headers.ContainsKey('Authorization') -and $Headers.Authorization -eq "Basic $encodedToken"}
+        }
+
+        It "should add the query string parameters" {
+            Mock Invoke-RestMethod {}
+
+            $Script:BWAF_TOKEN = [PSCustomObject]@{
+                token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
+            }
+            
+            Invoke-BarracudaWAFApi -Path '/restapi/v1/system' -Parameters @{
+                parameters = 'cluster_shared_secret'
+            }
+
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/system?parameters=cluster_shared_secret" -and $Headers.ContainsKey('Authorization') }
         }
     }
 }

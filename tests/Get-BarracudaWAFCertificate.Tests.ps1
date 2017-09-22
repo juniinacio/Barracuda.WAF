@@ -27,7 +27,7 @@ InModuleScope Barracuda.WAF {
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/certificates/Cert1" -and $Headers.ContainsKey('Authorization')}
         }
 
-        It "should support pipeline input" {
+        It "should accept pipeline input" {
             Mock Invoke-RestMethod {}
             
             "Cert1", "Cert2" | Get-BarracudaWAFCertificate
