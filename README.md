@@ -37,7 +37,7 @@ To get retrieve a list of virtual services, enter:
 Set-BarracudaWAFApiUrl -Url "http://192.168.0.1:8000"
 
 # Connect to WAF
-Connect-Account -Credential (Get-Credential)
+Connect-BarracudaWAFAccount -Credential (Get-Credential)
 
 # Retrieve a list of virtual services
 Get-BarracudaWAFVirtualService
