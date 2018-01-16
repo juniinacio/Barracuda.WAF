@@ -41,10 +41,10 @@ function Get-Service {
     process {
         if ($PSBoundParameters.ContainsKey('VirtualServiceId')) {
             foreach ($virtualService in $VirtualServiceId) {
-                Invoke-API -Path $('/restapi/v1/virtual_services/{0}' -f $virtualService)
+                Invoke-API -Path $('/restapi/v3/services/{0}' -f $virtualService)
             }
         } else {
-            Invoke-API -Path '/restapi/v1/virtual_services'
+            Invoke-API -Path '/restapi/v3/services'
         }
     }
 }
