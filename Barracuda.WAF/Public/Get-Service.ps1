@@ -27,21 +27,20 @@ function Get-Service {
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # VirtualServiceId help description
+        # WebApplicationName help description
         [Parameter(
             Mandatory = $false,
-            Position = 0,
             ValueFromPipeline = $true
         )]
         [ValidateNotNullOrEmpty()]        
         [String[]]
-        $VirtualServiceId
+        $WebApplicationName
     )
 
     process {
-        if ($PSBoundParameters.ContainsKey('VirtualServiceId')) {
-            foreach ($virtualService in $VirtualServiceId) {
-                Invoke-API -Path $('/restapi/v3/services/{0}' -f $virtualService)
+        if ($PSBoundParameters.ContainsKey('WebApplicationName')) {
+            foreach ($webAppName in $WebApplicationName) {
+                Invoke-API -Path $('/restapi/v3/services/{0}' -f $webAppName)
             }
         } else {
             Invoke-API -Path '/restapi/v3/services'

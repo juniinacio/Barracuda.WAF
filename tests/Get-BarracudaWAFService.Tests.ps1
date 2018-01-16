@@ -12,27 +12,28 @@ InModuleScope Barracuda.WAF {
         }
 
         It "should retrieve a collection of virtual services" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
 
             Get-BarracudaWAFService
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/services" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services" }
         }
 
         It "should retrieve a single virtual service" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
             
-            Get-BarracudaWAFService -VirtualServiceId "demo_service"
+            Get-BarracudaWAFService -WebApplicationName "demo_service"
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/services/demo_service" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services/demo_service" }
         }
 
         It "should accept pipeline input" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
             
             "demo_service1", "demo_service2" | Get-BarracudaWAFService
 
-            Assert-MockCalled Invoke-RestMethod -Times 2
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services/demo_service1" }
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services/demo_service2" }
         }
     }
 }
