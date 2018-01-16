@@ -21,42 +21,44 @@
     The functionality that best describes this cmdlet
 #>
 function Set-LicenseTerms {
-    [CmdletBinding(DefaultParameterSetName='HourlySKU')]
+    [CmdletBinding()]
     Param (
         # Name help description
-        [Parameter(Mandatory=$true, Position=0, ParameterSetName='HourlySKU')]
+        [Parameter(Mandatory=$true, Position=0)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
         
         # Email help description
-        [Parameter(Mandatory=$true, Position=1, ParameterSetName='HourlySKU')]
+        [Parameter(Mandatory=$true, Position=1)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Email,
 
         # Company help description
-        [Parameter(Mandatory=$false, Position=2, ParameterSetName='HourlySKU')]
+        [Parameter(Mandatory=$false, Position=2)]
         [AllowEmptyString()]
         [String]
         $Company,
 
-        # Hourly help description
-        [Parameter(Mandatory=$true, Position=3, ParameterSetName='HourlySKU')]
-        [switch]
-        $Hourly
+        # SKU help description
+        [Parameter(Mandatory=$false, Position=4)]
+        [ValidateSet('hourly', 'byol')]
+        [String]
+        $SKU = 'hourly'
     )
     
     end {
+        $PSBoundParameters.Remove("SKU")
 
-        if ($PSCmdlet.ParameterSetName -eq "HourlySKU") {
-            $PSBoundParameters.Remove("Hourly") | Out-Null
-
-            $params = @{
-                Uri = $Script:BWAF_URI
-                UseBasicParsing = $true
-                Body = Get-LicenseTermsBody @PSBoundParameters
-                Method  = 'Post'
+        switch ($SKU) {
+            Default {
+                $params = @{
+                    Uri = $Script:BWAF_URI
+                    UseBasicParsing = $true
+                    Body = Get-LicenseTermsBody @PSBoundParameters
+                    Method  = 'Post'
+                }
             }
         }
 
