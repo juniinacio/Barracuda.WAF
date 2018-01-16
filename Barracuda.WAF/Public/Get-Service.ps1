@@ -20,9 +20,9 @@
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
 .LINK
-    https://campus.barracuda.com/product/webapplicationfirewall/article/WAF/RESTAPIService/
+    https://campus.barracuda.com/product/webapplicationfirewall/doc/73698479/rest-api-version-3-v3/
 #>
-function Get-VirtualService {
+function Get-Service {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
