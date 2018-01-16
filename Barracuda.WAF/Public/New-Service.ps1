@@ -174,7 +174,7 @@ function New-Service {
 
         # AzureIpSelect help description
         [Parameter(
-            Mandatory = $true,
+            Mandatory = $false,
             ValueFromPipelineByPropertyName = $true
         )]
         [ValidateNotNullOrEmpty()]

@@ -96,9 +96,9 @@ function Invoke-Api
             $requestParameters.Headers = $newHeaders
 
             if ($PSBoundParameters.ContainsKey('PostData')) {
-                $requestParameters.Body = $PostData | ConvertTo-Json -Depth 4
+                $requestParameters.Body = $PostData | ConvertTo-Json -Depth 10
                 
-                Write-Debug "Body: `n$($PostData | ConvertTo-Json -Depth 4)`n"
+                Write-Debug "Body: `n$($PostData | ConvertTo-Json -Depth 10)`n"
             }
             
             if ($PSBoundParameters.ContainsKey('Method')) {

@@ -50,11 +50,5 @@ InModuleScope Barracuda.WAF {
             {New-BarracudaWAFService -IpAddress '' -Name 'http' -AzureIpSelect '10.0.0.10'} | Should Throw
 
         }
-
-        It "should throw an exception when no azure ip is given" {
-            
-            {New-BarracudaWAFService -IpAddress '10.0.0.25' -Name 'http' -AzureIpSelect ''} | Should Throw
-
-        }
     }
 }
