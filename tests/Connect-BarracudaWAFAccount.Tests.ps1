@@ -17,11 +17,11 @@ InModuleScope Barracuda.WAF {
                 password = $credentials.GetNetworkCredential().Password
             }
 
-            $jsonData = $data | ConvertTo-Json -Depth 4
+            $jsonData = $data | ConvertTo-Json
 
             Connect-BarracudaWAFAccount -Credential $credentials
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/login" -and $Body -eq $jsonData }
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/login" -and $Body -eq $jsonData -and $Method -eq 'Post' }
         }
 
         It "should store the token" {

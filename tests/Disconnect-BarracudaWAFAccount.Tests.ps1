@@ -16,7 +16,7 @@ InModuleScope Barracuda.WAF {
 
             Disconnect-BarracudaWAFAccount
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/logout" -and $Headers.ContainsKey('Authorization') }
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/logout" -and $Headers.ContainsKey('Authorization') -and $Method -eq 'Delete' }
         }
 
         It "should remove the token" {

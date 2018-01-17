@@ -29,7 +29,7 @@ function Disconnect-Account {
     Param ()
     
     process {
-        Invoke-API -Path '/restapi/v1/logout' -Method Delete
+        Invoke-API -Path '/restapi/v3/logout' -Method Delete
     }
 
     end {

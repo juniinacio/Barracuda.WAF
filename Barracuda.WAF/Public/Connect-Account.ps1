@@ -48,7 +48,7 @@ function Connect-Account {
             username = $Credential.GetNetworkCredential().UserName
             password = $Credential.GetNetworkCredential().Password
         }
-        $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v1/login' -Method Post -PostData $postData
+        $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v3/login' -Method Post -PostData $postData
     }
 
     end {
