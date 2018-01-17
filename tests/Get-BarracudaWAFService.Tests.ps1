@@ -22,7 +22,7 @@ InModuleScope Barracuda.WAF {
         It "should retrieve a single virtual service" {
             Mock Invoke-Api {}
             
-            Get-BarracudaWAFService -WebApplicationName "demo_service"
+            Get-BarracudaWAFService -Name "demo_service"
 
             Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services/demo_service" }
         }
