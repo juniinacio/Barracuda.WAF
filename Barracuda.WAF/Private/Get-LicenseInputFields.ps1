@@ -20,36 +20,34 @@
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
 #>
-function Get-LicenseTermsBody {
-    [CmdletBinding()]
+function Get-LicenseInputFields {
     Param (
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
         
         # Email help description
-        [Parameter(Mandatory=$true, Position=2)]
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Email,
 
         # Company help description
-        [Parameter(Mandatory=$false, Position=3)]
+        [Parameter(Mandatory=$false)]
         [AllowEmptyString()]
         [String]
         $Company
     )
     
-    end {
-        $htmlWebResponseObject = Invoke-WebRequest -Uri $Script:BWAF_URI -UseBasicParsing
-
+    $webRequest = Invoke-WebRequest -Uri $Script:BWAF_URI -UseBasicParsing
+    if ($webRequest.InputFields.FindByName("eula_hash_val") -ne $null) {
         return @{
             name_sign = $Name
             email_sign = $Email
             company_sign = $Company
-            eula_hash_val = $htmlWebResponseObject.InputFields.FindByName("eula_hash_val").value
-            action = $htmlWebResponseObject.InputFields.FindByName("action").value
+            eula_hash_val = $webRequest.InputFields.FindByName("eula_hash_val").value
+            action = $webRequest.InputFields.FindByName("action").value
         }
     }
 }

@@ -24,44 +24,46 @@ function Set-LicenseTerms {
     [CmdletBinding()]
     Param (
         # Name help description
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
         
         # Email help description
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Email,
 
         # Company help description
-        [Parameter(Mandatory=$false, Position=2)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName = $true)]
         [AllowEmptyString()]
         [String]
-        $Company,
+        $Company = "",
 
         # SKU help description
-        [Parameter(Mandatory=$false, Position=4)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('hourly', 'byol')]
         [String]
         $SKU = 'hourly'
     )
     
-    end {
+    process {
         $PSBoundParameters.Remove("SKU") | Out-Null
 
         switch ($SKU) {
             Default {
-                $params = @{
-                    Uri = $Script:BWAF_URI
-                    UseBasicParsing = $true
-                    Body = Get-LicenseTermsBody @PSBoundParameters
-                    Method  = 'Post'
+                $fields = Get-LicenseInputFields @PSBoundParameters
+                if ($fields) {
+                    $params = @{
+                        Uri = $Script:BWAF_URI
+                        UseBasicParsing = $true
+                        Body = $fields
+                        Method  = 'Post'
+                    }
+                    Invoke-WebRequest @params
                 }
             }
         }
-
-        $request = Invoke-WebRequest @params
     }
 }

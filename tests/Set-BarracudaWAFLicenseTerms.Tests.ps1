@@ -9,7 +9,7 @@ InModuleScope Barracuda.WAF {
 
         It "should activate the hourly sku" {
             Mock Invoke-WebRequest {}
-            Mock Get-LicenseTermsBody -MockWith {
+            Mock Get-LicenseInputFields -MockWith {
                 return @{
                     name_sign = "Juni Inacio"
                     email_sign = "juni.inacio@example.com"
@@ -24,9 +24,21 @@ InModuleScope Barracuda.WAF {
             Assert-MockCalled Invoke-WebRequest -ParameterFilter { $Uri -eq "https://waf1.com/" -and $UseBasicParsing -eq $true -and $Body.name_sign -eq "Juni Inacio" -and $Body.email_sign -eq "juni.inacio@example.com" -and $Body.company_sign -eq "Macaw OutSourcing Services" -and $Body.eula_hash_val -eq "ed4480205f84cde3e6bdce0c987348d1d90de9db" } -Times 1
         }
 
+        It "should throw an exception when no name is given" {
+
+            {Set-BarracudaWAFLicenseTerms -Name "" -Email "juni.inacio@example.com"} | Should Throw
+
+        }
+
+        It "should throw an exception when no email is given" {
+
+            {Set-BarracudaWAFLicenseTerms -Name "Juni Inacio" -Email ""} | Should Throw
+
+        }
+
         It "should not require company information" {
             Mock Invoke-WebRequest {}
-            Mock Get-LicenseTermsBody -MockWith {
+            Mock Get-LicenseInputFields -MockWith {
                 return @{
                     name_sign = "Juni Inacio"
                     email_sign = "juni.inacio@example.com"
@@ -39,6 +51,16 @@ InModuleScope Barracuda.WAF {
 
             Assert-MockCalled Invoke-WebRequest -ParameterFilter { $Uri -eq "https://waf1.com/" -and $UseBasicParsing -eq $true } -Times 1
             Assert-MockCalled Invoke-WebRequest -ParameterFilter { $Uri -eq "https://waf1.com/" -and $UseBasicParsing -eq $true -and $Body.name_sign -eq "Juni Inacio" -and $Body.email_sign -eq "juni.inacio@example.com" -and $Body.company_sign -eq "" -and $Body.eula_hash_val -eq "ed4480205f84cde3e6bdce0c987348d1d90de9db" } -Times 1
+        }
+
+        It "should not activate the license" {
+            Mock Invoke-WebRequest {}
+            Mock Get-LicenseInputFields -MockWith {
+            }
+
+            Set-BarracudaWAFLicenseTerms -Name "Juni Inacio" -Email "juni.inacio@example.com"
+
+            Assert-MockCalled Invoke-WebRequest -Times 0 -Scope It
         }
     }
 }
