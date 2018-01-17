@@ -22,7 +22,7 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/doc/73698479/rest-api-version-3-v3/
 #>
-function New-Service {
+function Update-Service {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
@@ -197,6 +197,6 @@ function New-Service {
 
         $PSBoundParameters |
             ConvertTo-PostData |
-                Invoke-API -Path '/restapi/v3/services' -Method Post
+                Invoke-API -Path ('/restapi/v3/services/{0}' -f $Name) -Method Patch
     }
 }

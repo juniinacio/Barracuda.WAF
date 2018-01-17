@@ -47,7 +47,7 @@ function ConvertTo-PostData {
         $keys = $InputObject.Keys | Sort-Object
         foreach ($key in $keys) {
             if (-not $IgnoreProperty.Contains($key)) {
-                $postData.$(($key -creplace '(?<=.)([A-Z])', '-$0').ToLower()) = $InputObject.$key
+                $postData.$(($key -creplace '(?<=[a-z])([A-Z])', '-$0').ToLower()) = $InputObject.$key
             } else {
                 $postData.$($key.ToLower()) = $InputObject.$key
             }

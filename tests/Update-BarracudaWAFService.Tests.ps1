@@ -2,7 +2,7 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "New-BarracudaWAFService" {
+    Describe "Update-BarracudaWAFService" {
         BeforeEach {
             $Script:BWAF_URI = "https://waf1.com"
 
@@ -34,20 +34,20 @@ InModuleScope Barracuda.WAF {
 }         
 "@          | ConvertFrom-Json
 
-            $inputObject | New-BarracudaWAFService
+            $inputObject | Update-BarracudaWAFService
 
-            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq '/restapi/v3/services' -and $Method -eq 'Post' -and $PostData.Name -eq 'name' -and $PostData.'ip-address' -eq 'ipaddress' } -Times 1
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq '/restapi/v3/services/name' -and $Method -eq 'Patch' -and $PostData.Name -eq 'name' -and $PostData.'ip-address' -eq 'ipaddress' } -Times 1
         }
 
         It "should throw an exception when no name is given" {
 
-            {New-BarracudaWAFService -IpAddress '10.0.0.25' -Name '' -AzureIpSelect '10.0.0.10'} | Should Throw
+            {Update-BarracudaWAFService -IpAddress '10.0.0.25' -Name '' -AzureIpSelect '10.0.0.10'} | Should Throw
 
         }
 
         It "should throw an exception when no ip address is given" {
             
-            {New-BarracudaWAFService -IpAddress '' -Name 'http' -AzureIpSelect '10.0.0.10'} | Should Throw
+            {Update-BarracudaWAFService -IpAddress '' -Name 'http' -AzureIpSelect '10.0.0.10'} | Should Throw
 
         }
     }

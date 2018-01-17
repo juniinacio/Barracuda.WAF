@@ -16,6 +16,18 @@ InModuleScope Barracuda.WAF {
             
         }
 
+        It "should not convert to snake case" {
+            
+            $inputObject = @{
+                VSite = 'string'
+            }
+
+            $outputObject = $inputObject | ConvertTo-PostData
+
+            ($outputObject.Keys -ccontains 'vsite') | Should Be $true
+            
+        }
+
         It "should ignore given properties" {
             
             $inputObject = @{
