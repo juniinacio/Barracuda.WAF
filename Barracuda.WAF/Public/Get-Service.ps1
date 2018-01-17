@@ -40,7 +40,17 @@ function Get-Service {
     process {
         if ($PSBoundParameters.ContainsKey('Name')) {
             foreach ($n in $Name) {
-                Invoke-API -Path $('/restapi/v3/services/{0}' -f $n)
+                try {
+                    Invoke-API -Path $('/restapi/v3/services/{0}' -f $n)
+                } catch {
+                    if ($_.Exception -is [System.Net.WebException]) {
+                        if ($_.Exception.Response.StatusCode -ne 404) {
+                            throw
+                        }
+                    } else {
+                        throw
+                    }
+                }
             }
         } else {
             Invoke-API -Path '/restapi/v3/services'
