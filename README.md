@@ -39,8 +39,8 @@ Set-BarracudaWAFApiUrl -Url "http://192.168.0.1:8000"
 # Connect to WAF
 Connect-BarracudaWAFAccount -Credential (Get-Credential)
 
-# Retrieve a list of virtual services
-Get-BarracudaWAFVirtualService
+# Retrieve a list of services
+Get-BarracudaWAFService
 
 # Disconnect
 Disconnect-BarracudaWAFAccount
