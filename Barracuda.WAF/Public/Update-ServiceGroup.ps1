@@ -22,15 +22,14 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/article/WAF/RESTAPIServiceGroup/
 #>
-function Get-ServiceGroup {
+function Update-ServiceGroup {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # VsiteId help description
+        # VSite help description
         [Parameter(
-            Mandatory = $true,
-            Position = 0
+            Mandatory = $true
         )]
         [ValidateNotNullOrEmpty()]        
         [String]
@@ -38,23 +37,26 @@ function Get-ServiceGroup {
 
         # Name help description
         [Parameter(
-            Mandatory = $false,
-            Position = 1,
-            ValueFromPipeline = $true
+            Mandatory = $true
         )]
-        [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]        
+        [String]
+        $Name,
+
+        # NewName help description
+        [Parameter(
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
         [Alias('service-group')]
-        [String[]]
-        $Name
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $NewName
     )
     
     process {
-        if ($PSBoundParameters.ContainsKey('Name')) {
-            foreach ($n in $Name) {
-                Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $n) -Method Get
-            }
-        } else {
-            Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups' -f $VSite) -Method Get
-        }
+        @{
+            'service-group' = $NewName
+        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $Name) -Method Patch
     }
 }

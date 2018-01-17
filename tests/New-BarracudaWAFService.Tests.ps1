@@ -3,11 +3,6 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 
 InModuleScope Barracuda.WAF {
     Describe "New-BarracudaWAFService" {
-        BeforeEach {
-            $Script:BWAF_URI = "https://waf1.com"
-
-            $FilePath = Join-Path -Path $PSScriptRoot -ChildPath "Files\ImportFiles"
-        }
 
         It "should accept pipeline input" {
             Mock Invoke-Api {}

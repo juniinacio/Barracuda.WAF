@@ -144,6 +144,16 @@ function Update-Service {
         [String]
         $Name,
 
+        # NewName help description
+        [Parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [ValidateNotNullOrEmpty()]
+        [ValidateLength(1, 64)]
+        [String]
+        $NewName,
+
         # Port help description
         [Parameter(
             Mandatory = $false,
@@ -194,6 +204,10 @@ function Update-Service {
     )
 
     process {
+
+        if ($PSBoundParameters.ContainsKey('NewName')) {
+            $PSBoundParameters['Name'] = $NewName
+        }
 
         $PSBoundParameters |
             ConvertTo-PostData |

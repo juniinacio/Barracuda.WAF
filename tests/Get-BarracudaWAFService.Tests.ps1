@@ -3,13 +3,6 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 
 InModuleScope Barracuda.WAF {
     Describe "Get-BarracudaWAFService" {
-        BeforeAll {
-            $Script:BWAF_URI = "https://waf1.com"
-
-            $Script:BWAF_TOKEN = [PSCustomObject]@{
-                token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
-            }
-        }
 
         It "should retrieve a collection of virtual services" {
             Mock Invoke-Api {}
