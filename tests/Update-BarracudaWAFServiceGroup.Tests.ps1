@@ -22,7 +22,7 @@ InModuleScope Barracuda.WAF {
 
             $inputObject | Update-BarracudaWAFServiceGroup -VSite 'default' -Name 'group'
 
-            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/vsites/default/service-groups/group" -and $Method -eq 'Patch' -and $PostData.'service-group' -eq 'string'}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/vsites/default/service-groups/group" -and $Method -eq 'Put' -and $PostData.'service-group' -eq 'string'}
         }
 
         It "should throw an exception when no vsite is given" {

@@ -31,7 +31,7 @@ InModuleScope Barracuda.WAF {
 
             $inputObject | Update-BarracudaWAFService
 
-            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq '/restapi/v3/services/name' -and $Method -eq 'Patch' -and $PostData.Name -eq 'name' -and $PostData.'ip-address' -eq 'ipaddress' } -Times 1
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq '/restapi/v3/services/name' -and $Method -eq 'Put' -and $PostData.Name -eq 'name' -and $PostData.'ip-address' -eq 'ipaddress' } -Times 1
         }
 
         It "should throw an exception when no name is given" {

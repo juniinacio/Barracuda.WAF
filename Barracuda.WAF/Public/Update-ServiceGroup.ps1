@@ -57,6 +57,6 @@ function Update-ServiceGroup {
     process {
         @{
             'service-group' = $NewName
-        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $Name) -Method Patch
+        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $Name) -Method Put
     }
 }

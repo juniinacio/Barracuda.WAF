@@ -211,6 +211,6 @@ function Update-Service {
 
         $PSBoundParameters |
             ConvertTo-PostData |
-                Invoke-API -Path ('/restapi/v3/services/{0}' -f $Name) -Method Patch
+                Invoke-API -Path ('/restapi/v3/services/{0}' -f $Name) -Method Put
     }
 }
