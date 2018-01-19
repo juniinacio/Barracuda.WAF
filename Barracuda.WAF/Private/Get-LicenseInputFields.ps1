@@ -21,6 +21,7 @@
     The functionality that best describes this cmdlet
 #>
 function Get-LicenseInputFields {
+    [cmdletbinding()]
     Param (
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
@@ -39,15 +40,17 @@ function Get-LicenseInputFields {
         [String]
         $Company
     )
-    
-    $webRequest = Invoke-WebRequest -Uri $Script:BWAF_URI -UseBasicParsing
-    if ($webRequest.InputFields.FindByName("eula_hash_val") -ne $null) {
-        return @{
-            name_sign = $Name
-            email_sign = $Email
-            company_sign = $Company
-            eula_hash_val = $webRequest.InputFields.FindByName("eula_hash_val").value
-            action = $webRequest.InputFields.FindByName("action").value
+
+    process {
+        $webRequest = Invoke-WebRequest -Uri $Script:BWAF_URI -UseBasicParsing
+        if ($webRequest.InputFields.FindByName("eula_hash_val") -ne $null) {
+            return @{
+                name_sign = $Name
+                email_sign = $Email
+                company_sign = $Company
+                eula_hash_val = $webRequest.InputFields.FindByName("eula_hash_val").value
+                action = $webRequest.InputFields.FindByName("action").value
+            }
         }
     }
 }

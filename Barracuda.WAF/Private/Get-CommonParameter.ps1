@@ -20,7 +20,7 @@
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
 #>
-function Get-CommonCommandParameter {
+function Get-CommonParameter {
     [cmdletbinding()]
     param()
 

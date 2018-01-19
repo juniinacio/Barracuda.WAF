@@ -53,8 +53,8 @@ function ConvertTo-PostData {
             }
         }
 
-        foreach ($commonCommandParameter in (Get-CommonCommandParameter)) {
-            $postData.Remove($commonCommandParameter) | Out-Null
+        foreach ($commonParameter in (Get-CommonParameter)) {
+            $postData.Remove($commonParameter) | Out-Null
         }
 
         $postData
