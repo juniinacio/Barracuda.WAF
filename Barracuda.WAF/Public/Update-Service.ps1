@@ -27,6 +27,15 @@ function Update-Service {
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
+        # WebApplicationName help description
+        [Parameter(
+            Mandatory = $true
+        )]
+        [ValidateNotNullOrEmpty()]
+        [ValidateLength(1, 64)]
+        [String]
+        $WebApplicationName,
+
         # Status help description
         [Parameter(
             Mandatory = $false,
@@ -134,16 +143,6 @@ function Update-Service {
         [String]
         $AddressVersion = 'IPv4',
 
-        # WebApplicationName help description
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [ValidateNotNullOrEmpty()]
-        [ValidateLength(1, 64)]
-        [String]
-        $WebApplicationName,
-
         # NewWebApplicationName help description
         [Parameter(
             Mandatory = $false,
@@ -207,10 +206,10 @@ function Update-Service {
     process {
 
         $PSBoundParameters.Remove('WebApplicationName')
-        $PSBoundParameters.Remove('NewWebApplicationName')
 
         if ($PSBoundParameters.ContainsKey('NewWebApplicationName')) {
             $PSBoundParameters['Name'] = $NewWebApplicationName
+            $PSBoundParameters.Remove('NewWebApplicationName')
         }
 
         $PSBoundParameters |
