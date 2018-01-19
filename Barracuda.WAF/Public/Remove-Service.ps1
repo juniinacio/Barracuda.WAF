@@ -27,20 +27,21 @@ function Remove-Service {
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # Name help description
+        # WebApplicationName help description
         [Parameter(
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
+        [Alias('Name')]
         [String[]]
-        $Name
+        $WebApplicationName
     )
 
     process {
-        foreach ($n in $Name) {
-            Invoke-API -Path ('/restapi/v3/services/{0}' -f $n) -Method Delete
+        foreach ($name in $WebApplicationName) {
+            Invoke-API -Path ('/restapi/v3/services/{0}' -f $name) -Method Delete
         }
     }
 }

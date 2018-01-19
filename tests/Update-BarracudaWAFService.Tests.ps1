@@ -20,7 +20,7 @@ InModuleScope Barracuda.WAF {
     "ip-address": "ipaddress",
     "mask": "string",
     "address-version": "IPv4",
-    "name": "name",
+    "name": "new",
     "port": 80,
     "dps-enabled": "No",
     "type": "HTTP",
@@ -29,20 +29,20 @@ InModuleScope Barracuda.WAF {
 }         
 "@          | ConvertFrom-Json
 
-            $inputObject | Update-BarracudaWAFService
+            $inputObject | Update-BarracudaWAFService -WebApplicationName 'name'
 
-            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq '/restapi/v3/services/name' -and $Method -eq 'Put' -and $PostData.Name -eq 'name' -and $PostData.'ip-address' -eq 'ipaddress' } -Times 1
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq '/restapi/v3/services/name' -and $Method -eq 'Put' -and $PostData.Name -eq 'new' -and $PostData.'ip-address' -eq 'ipaddress' } -Times 1
         }
 
         It "should throw an exception when no name is given" {
 
-            {Update-BarracudaWAFService -IpAddress '10.0.0.25' -Name '' -AzureIpSelect '10.0.0.10'} | Should Throw
+            {Update-BarracudaWAFService -IpAddress '10.0.0.25' -WebApplicationName '' -AzureIpSelect '10.0.0.10'} | Should Throw
 
         }
 
         It "should throw an exception when no ip address is given" {
             
-            {Update-BarracudaWAFService -IpAddress '' -Name 'http' -AzureIpSelect '10.0.0.10'} | Should Throw
+            {Update-BarracudaWAFService -IpAddress '' -WebApplicationName 'http' -AzureIpSelect '10.0.0.10'} | Should Throw
 
         }
     }

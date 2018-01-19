@@ -134,7 +134,7 @@ function Update-Service {
         [String]
         $AddressVersion = 'IPv4',
 
-        # Name help description
+        # WebApplicationName help description
         [Parameter(
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
@@ -142,17 +142,18 @@ function Update-Service {
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [String]
-        $Name,
+        $WebApplicationName,
 
-        # NewName help description
+        # NewWebApplicationName help description
         [Parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
+        [Alias('name')]
         [String]
-        $NewName,
+        $NewWebApplicationName,
 
         # Port help description
         [Parameter(
@@ -205,12 +206,12 @@ function Update-Service {
 
     process {
 
-        if ($PSBoundParameters.ContainsKey('NewName')) {
-            $PSBoundParameters['Name'] = $NewName
+        if ($PSBoundParameters.ContainsKey('NewWebApplicationName')) {
+            $PSBoundParameters['Name'] = $NewWebApplicationName
         }
 
         $PSBoundParameters |
             ConvertTo-PostData |
-                Invoke-API -Path ('/restapi/v3/services/{0}' -f $Name) -Method Put
+                Invoke-API -Path ('/restapi/v3/services/{0}' -f $WebApplicationName) -Method Put
     }
 }

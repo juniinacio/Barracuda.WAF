@@ -27,21 +27,21 @@ function Get-Service {
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # Name help description
+        # WebApplicationName help description
         [Parameter(
             Mandatory = $false,
             ValueFromPipeline = $true
         )]
         [ValidateNotNullOrEmpty()]        
         [String[]]
-        $Name
+        $WebApplicationName
     )
 
     process {
-        if ($PSBoundParameters.ContainsKey('Name')) {
-            foreach ($n in $Name) {
+        if ($PSBoundParameters.ContainsKey('WebApplicationName')) {
+            foreach ($name in $WebApplicationName) {
                 try {
-                    Invoke-API -Path $('/restapi/v3/services/{0}' -f $n)
+                    Invoke-API -Path $('/restapi/v3/services/{0}' -f $name)
                 } catch {
                     if ($_.Exception -is [System.Net.WebException]) {
                         if ($_.Exception.Response.StatusCode -ne 404) {
