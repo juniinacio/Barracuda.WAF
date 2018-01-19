@@ -3,36 +3,29 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 
 InModuleScope Barracuda.WAF {
     Describe "Get-BarracudaWAFServer" {
-        BeforeAll {
-            $Script:BWAF_URI = "https://waf1.com"
-
-            $Script:BWAF_TOKEN = [PSCustomObject]@{
-                token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
-            }
-        }
 
         It "should retrieve a collection of servers" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
 
-            Get-BarracudaWAFServer -VirtualServiceId 'demo_service'
+            Get-BarracudaWAFServer -WebApplicationName 'default'
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/virtual_services/demo_service/servers" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services/default/servers" -and $Method -eq 'Get' } -Scope It
         }
 
         It "should retrieve a single server" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
             
-            Get-BarracudaWAFServer -VirtualServiceId 'demo_service' -ServerId 'demo_server'
+            Get-BarracudaWAFServer -WebApplicationName 'default' -ServerName 'demo'
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/virtual_services/demo_service/servers/demo_server" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/services/default/servers/demo" -and $Method -eq 'Get' } -Scope It
         }
 
         It "should accept pipeline input" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
             
-            "demo_server1", "demo_server2" | Get-BarracudaWAFServer -VirtualServiceId 'demo_service'
+            "demo_server1", "demo_server2" | Get-BarracudaWAFServer -WebApplicationName 'default'
 
-            Assert-MockCalled Invoke-RestMethod -Times 2
+            Assert-MockCalled Invoke-Api -Times 2 -Scope It
         }
     }
 }

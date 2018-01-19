@@ -27,33 +27,41 @@ function Get-Server {
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # VirtualServiceId help description
+        # WebApplicationName help description
         [Parameter(
-            Mandatory = $true,
-            Position = 0
+            Mandatory = $true
         )]
         [ValidateNotNullOrEmpty()]        
         [String]
-        $VirtualServiceId,
+        $WebApplicationName,
 
-        # ServerId help description
+        # ServerName help description
         [Parameter(
             Mandatory = $false,
-            Position = 1,
             ValueFromPipeline = $true
         )]
         [ValidateNotNullOrEmpty()]        
         [String[]]
-        $ServerId
+        $ServerName
     )
 
     process {
-        if ($PSBoundParameters.ContainsKey('ServerId')) {
-            foreach ($server in $ServerId) {
-                Invoke-API -Path $('/restapi/v1/virtual_services/{0}/servers/{1}' -f $VirtualServiceId, $server)
+        if ($PSBoundParameters.ContainsKey('ServerName')) {
+            foreach ($name in $ServerName) {
+                try {
+                    Invoke-API -Path $('/restapi/v3/services/{0}/servers/{1}' -f $WebApplicationName, $name) -Method Get
+                } catch {
+                    if ($_.Exception -is [System.Net.WebException]) {
+                        if ($_.Exception.Response.StatusCode -ne 404) {
+                            throw
+                        }
+                    } else {
+                        throw
+                    }
+                }
             }
         } else {
-            Invoke-API -Path $('/restapi/v1/virtual_services/{0}/servers' -f $VirtualServiceId)
+            Invoke-API -Path $('/restapi/v3/services/{0}/servers' -f $WebApplicationName) -Method Get
         }
     }
 }
