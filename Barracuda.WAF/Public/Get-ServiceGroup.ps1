@@ -51,7 +51,17 @@ function Get-ServiceGroup {
     process {
         if ($PSBoundParameters.ContainsKey('Name')) {
             foreach ($n in $Name) {
-                Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $n) -Method Get
+                try {
+                    Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $n) -Method Get
+                } catch {
+                    if ($_.Exception -is [System.Net.WebException]) {
+                        if ($_.Exception.Response.StatusCode -ne 404) {
+                            throw
+                        }
+                    } else {
+                        throw
+                    }
+                }
             }
         } else {
             Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups' -f $VSite) -Method Get
