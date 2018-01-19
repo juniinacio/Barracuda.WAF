@@ -20,13 +20,13 @@ InModuleScope Barracuda.WAF {
 
         It "should throw an exception when no vsite is given" {
 
-            {Remove-BarracudaWAFServiceGroup -VSite '' -Name 'string'} | Should Throw
+            {Remove-BarracudaWAFServiceGroup -VSite '' -ServiceGroup 'string'} | Should Throw
 
         }
 
         It "should throw an exception when no name is given" {
 
-            {Remove-BarracudaWAFServiceGroup -VSite 'default' -Name ''} | Should Throw
+            {Remove-BarracudaWAFServiceGroup -VSite 'default' -ServiceGroup ''} | Should Throw
 
         }
     }

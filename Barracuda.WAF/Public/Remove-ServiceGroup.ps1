@@ -43,12 +43,22 @@ function Remove-ServiceGroup {
         [Alias('service-group')]
         [ValidateNotNullOrEmpty()]
         [String[]]
-        $Name
+        $ServiceGroup
     )
     
     process {
-        foreach ($n in $Name) {
-            Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $n) -Method Delete
+        foreach ($name in $ServiceGroup) {
+            try {
+                Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $name) -Method Delete
+            } catch {
+                if ($_.Exception -is [System.Net.WebException]) {
+                    if ($_.Exception.Response.StatusCode -ne 404) {
+                        throw
+                    }
+                } else {
+                    throw
+                }
+            }
         }
     }
 }

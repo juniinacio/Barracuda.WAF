@@ -20,26 +20,26 @@ InModuleScope Barracuda.WAF {
 }        
 "@          | ConvertFrom-Json
 
-            $inputObject | Update-BarracudaWAFServiceGroup -VSite 'default' -Name 'group'
+            $inputObject | Update-BarracudaWAFServiceGroup -VSite 'default' -ServiceGroup 'group'
 
             Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/vsites/default/service-groups/group" -and $Method -eq 'Put' -and $PostData.'service-group' -eq 'string'}
         }
 
         It "should throw an exception when no vsite is given" {
 
-            {Update-BarracudaWAFServiceGroup -VSite '' -Name 'string'} | Should Throw
+            {Update-BarracudaWAFServiceGroup -VSite '' -ServiceGroup 'string'} | Should Throw
 
         }
 
         It "should throw an exception when no name is given" {
 
-            {Update-BarracudaWAFServiceGroup -VSite 'default' -Name '' -NewName 'new'} | Should Throw
+            {Update-BarracudaWAFServiceGroup -VSite 'default' -ServiceGroup '' -NewServiceGroup 'new'} | Should Throw
 
         }
 
         It "should throw an exception when no name is given" {
 
-            {Update-BarracudaWAFServiceGroup -VSite 'default' -Name 'name' -NewName ''} | Should Throw
+            {Update-BarracudaWAFServiceGroup -VSite 'default' -ServiceGroup 'name' -NewServiceGroup ''} | Should Throw
 
         }
     }

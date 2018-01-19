@@ -35,15 +35,15 @@ function Update-ServiceGroup {
         [String]
         $VSite,
 
-        # Name help description
+        # ServiceGroup help description
         [Parameter(
             Mandatory = $true
         )]
         [ValidateNotNullOrEmpty()]        
         [String]
-        $Name,
+        $ServiceGroup,
 
-        # NewName help description
+        # NewServiceGroup help description
         [Parameter(
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
@@ -51,12 +51,12 @@ function Update-ServiceGroup {
         [Alias('service-group')]
         [ValidateNotNullOrEmpty()]
         [String]
-        $NewName
+        $NewServiceGroup
     )
     
     process {
         @{
-            'service-group' = $NewName
-        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $Name) -Method Put
+            'service-group' = $NewServiceGroup
+        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $ServiceGroup) -Method Put
     }
 }
