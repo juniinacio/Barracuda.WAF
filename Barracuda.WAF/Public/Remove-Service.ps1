@@ -41,7 +41,17 @@ function Remove-Service {
 
     process {
         foreach ($name in $WebApplicationName) {
-            Invoke-API -Path ('/restapi/v3/services/{0}' -f $name) -Method Delete
+            try {
+                Invoke-API -Path ('/restapi/v3/services/{0}' -f $name) -Method Delete
+            } catch {
+                if ($_.Exception -is [System.Net.WebException]) {
+                    if ($_.Exception.Response.StatusCode -ne 404) {
+                        throw
+                    }
+                } else {
+                    throw
+                }
+            }
         }
     }
 }
