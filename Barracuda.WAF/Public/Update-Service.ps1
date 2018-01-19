@@ -206,6 +206,9 @@ function Update-Service {
 
     process {
 
+        $PSBoundParameters.Remove('WebApplicationName')
+        $PSBoundParameters.Remove('NewWebApplicationName')
+
         if ($PSBoundParameters.ContainsKey('NewWebApplicationName')) {
             $PSBoundParameters['Name'] = $NewWebApplicationName
         }
