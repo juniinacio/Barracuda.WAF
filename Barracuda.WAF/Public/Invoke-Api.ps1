@@ -40,7 +40,7 @@ function Invoke-Api
         # Data help description
         [Parameter(Mandatory=$false, ValueFromPipeline=$true)]
         [ValidateNotNullOrEmpty()]
-        [Hashtable]
+        [Object]
         $PostData,
         
         # Method help description
@@ -84,9 +84,7 @@ function Invoke-Api
             if ($PSBoundParameters.ContainsKey('Headers')) {
                 $Headers.GetEnumerator() |
                 ForEach-Object {
-                    if (-not $newHeaders.ContainsKey($_.Key)) {
-                        $newHeaders.$_.Key = $_.Value
-                    }
+                    $newHeaders.$($_.Key) = $_.Value
                 }
             }
 
@@ -96,9 +94,15 @@ function Invoke-Api
             $requestParameters.Headers = $newHeaders
 
             if ($PSBoundParameters.ContainsKey('PostData')) {
-                $requestParameters.Body = $PostData | ConvertTo-Json -Depth 10
                 
-                Write-Debug "Body: `n$($PostData | ConvertTo-Json -Depth 10)`n"
+                $body = $PostData
+                if ($body -is [Hashtable]) {
+                    $body = $PostData | ConvertTo-Json -Depth 10
+                }
+                
+                Write-Debug "Body: `n$body`n"
+                
+                $requestParameters.Body = $body
             }
             
             if ($PSBoundParameters.ContainsKey('Method')) {

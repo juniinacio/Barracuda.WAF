@@ -3,36 +3,38 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 
 InModuleScope Barracuda.WAF {
     Describe "Get-BarracudaWAFCertificate" {
-        BeforeAll {
-            $Script:BWAF_URI = "https://waf1.com"
-
-            $Script:BWAF_TOKEN = [PSCustomObject]@{
-                token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
-            }
-        }
 
         It "should retrieve a collection of certificates" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
 
             Get-BarracudaWAFCertificate
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/certificates" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/certificates" } -Scope It
         }
 
-        It "should retrieve a single certificate" {
-            Mock Invoke-RestMethod {}
+        It "should retrieve a single certificates" {
+            Mock Invoke-Api {}
             
-            Get-BarracudaWAFCertificate -CertificateId "Cert1"
+            Get-BarracudaWAFCertificate -CertificateName "demo_certificate"
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/certificates/Cert1" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/certificates/demo_certificate" } -Scope It
         }
 
         It "should accept pipeline input" {
-            Mock Invoke-RestMethod {}
+            Mock Invoke-Api {}
             
-            "Cert1", "Cert2" | Get-BarracudaWAFCertificate
+            "demo_certificate1", "demo_certificate2" | Get-BarracudaWAFCertificate
 
-            Assert-MockCalled Invoke-RestMethod -Times 2
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/certificates/demo_certificate1" } -Scope It
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/certificates/demo_certificate2" } -Scope It
+        }
+
+        It "should download certificates" {
+            Mock Invoke-Api {}
+            
+            Get-BarracudaWAFCertificate -CertificateName "demo_certificate" -Download 'csr' -Password (ConvertTo-SecureString -String 'V3ryC0mpl#x' -AsPlainText -Force)
+
+            Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "/restapi/v3/certificates/demo_certificate" -and $Parameters.download -eq 'csr' -and $Parameters.password -eq 'V3ryC0mpl#x' } -Scope It
         }
     }
 }

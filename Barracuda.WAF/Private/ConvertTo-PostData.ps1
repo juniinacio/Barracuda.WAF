@@ -32,6 +32,14 @@ function ConvertTo-PostData {
         [Hashtable]
         $InputObject,
 
+        # ConcatChar help description
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $ConcatChar = '-',
+
         # IgnoreProperty help description
         [Parameter(
             Mandatory = $false
@@ -47,7 +55,7 @@ function ConvertTo-PostData {
         $keys = $InputObject.Keys | Sort-Object
         foreach ($key in $keys) {
             if (-not $IgnoreProperty.Contains($key)) {
-                $postData.$(($key -creplace '(?<=[a-z])([A-Z])', '-$0').ToLower()) = $InputObject.$key
+                $postData.$(($key -creplace '(?<=[a-z])([A-Z])', ('{0}$0' -f $ConcatChar)).ToLower()) = $InputObject.$key
             } else {
                 $postData.$($key.ToLower()) = $InputObject.$key
             }
