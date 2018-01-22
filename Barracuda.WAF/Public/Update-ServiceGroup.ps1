@@ -28,26 +28,19 @@ function Update-ServiceGroup {
     [OutputType([PSCustomObject])]
     Param (
         # VSite help description
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]        
         [String]
         $VSite,
 
         # ServiceGroup help description
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]        
         [String]
         $ServiceGroup,
 
         # NewServiceGroup help description
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('service-group')]
         [ValidateNotNullOrEmpty()]
         [String]

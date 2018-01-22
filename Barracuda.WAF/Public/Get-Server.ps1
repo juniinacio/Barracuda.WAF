@@ -28,18 +28,13 @@ function Get-Server {
     [OutputType([PSCustomObject])]
     Param (
         # WebApplicationName help description
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]        
         [String]
         $WebApplicationName,
 
         # ServerName help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]        
         [String[]]
         $ServerName

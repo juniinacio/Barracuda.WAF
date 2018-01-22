@@ -28,19 +28,14 @@ function New-Server {
     [OutputType([PSCustomObject])]
     Param (
         # WebApplicationName help description
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [String]
         $WebApplicationName,
 
         # ServerName help description
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 255)]
         [Alias('name')]
@@ -48,66 +43,45 @@ function New-Server {
         $ServerName,
 
         # Identifier help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('IP Address', 'Hostname')]
         [String]
         $Identifier = 'IP Address',
 
         # AddressVersion help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('IPv4', 'IPv6')]
         [Alias('address-version')]
         [String]
         $AddressVersion = 'IPv4',
 
         # AddressVersion help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('In Service', 'Out of Service Maintenance', 'Out of Service Sticky', 'Out of Service All')]
         [String]
         $Status = 'In Service',
 
         # IPAddress help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('ip-address')]
         [String]
         $IpAddress,
 
         # Hostname help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Hostname,
 
-         # Port help description
-         [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        # Port help description
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, 65535)]
         [Int]
         $Port = 80,
 
         # Comments help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Comments = 'Comments'

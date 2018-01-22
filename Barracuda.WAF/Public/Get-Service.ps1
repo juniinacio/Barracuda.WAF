@@ -28,10 +28,7 @@ function Get-Service {
     [OutputType([PSCustomObject])]
     Param (
         # WebApplicationName help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]        
         [String[]]
         $WebApplicationName

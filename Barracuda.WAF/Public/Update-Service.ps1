@@ -28,126 +28,88 @@ function Update-Service {
     [OutputType([PSCustomObject])]
     Param (
         # WebApplicationName help description
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [String]
         $WebApplicationName,
 
         # Status help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('On', 'Off')]
         [String]
         $Status = 'On',
 
         # ServiceId help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('service-id')]
         [String]
         $ServiceId,
 
         # Comments help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Comments = 'Comments',
 
         # EnableAccessLogs help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('Yes', 'No')]
         [Alias('enable-access-logs')]
         [String]
         $EnableAccessLogs = 'Yes',
 
         # SessionTimeout help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(0, 86400)]
         [Alias('session-timeout')]
         [Int]
         $SessionTimeout = 60,
 
         # AppId help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('app-id')]
         [String]
         $AppId,
 
         # Group help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [String]
         $Group,
 
         # VSite help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [String]
         $VSite,
 
         # IPAddress help description
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('ip-address')]
         [String]
         $IpAddress,
 
         # Mask help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Mask,
 
         # AddressVersion help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('IPv4', 'IPv6')]
         [Alias('address-version')]
         [String]
         $AddressVersion = 'IPv4',
 
         # NewWebApplicationName help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [Alias('name')]
@@ -155,48 +117,33 @@ function Update-Service {
         $NewWebApplicationName,
 
         # Port help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, 65535)]
         [Int]
         $Port = 80,
 
         # DpsEnabled help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('Yes', 'No')]
         [Alias('dps-enabled')]
         [String]
         $DpsEnabled = 'No',
 
         # Type help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('HTTP', 'HTTPS', 'Instant SSL', 'Redirect Service', 'Custom', 'Custom SSL', 'FTP', 'FTP SSL')]
         [String]
         $Type = 'HTTP',
 
         # AzureIpSelect help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('azure-ip-select')]
         [String]
         $AzureIpSelect,
 
         # LinkedServiceName help description
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('linked-service-name')]
         [String]

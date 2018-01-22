@@ -28,20 +28,13 @@ function Get-ServiceGroup {
     [OutputType([PSCustomObject])]
     Param (
         # VsiteId help description
-        [Parameter(
-            Mandatory = $true,
-            Position = 0
-        )]
+        [Parameter(Mandatory = $true, Position = 0)]
         [ValidateNotNullOrEmpty()]        
         [String]
         $VSite,
 
         # Name help description
-        [Parameter(
-            Mandatory = $false,
-            Position = 1,
-            ValueFromPipeline = $true
-        )]
+        [Parameter(Mandatory = $false, Position = 1, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]
         [Alias('service-group')]
         [String[]]

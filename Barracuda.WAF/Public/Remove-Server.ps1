@@ -28,19 +28,14 @@ function Remove-Server {
     [OutputType([PSCustomObject])]
     Param (
         # WebApplicationName help description
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [String]
         $WebApplicationName,
 
         # ServerName help description
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 64)]
         [Alias('name')]

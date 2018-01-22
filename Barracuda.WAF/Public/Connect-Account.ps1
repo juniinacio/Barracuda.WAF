@@ -28,11 +28,7 @@ function Connect-Account {
     [OutputType([PSCustomObject])]
     Param (
         # Credential help description
-        [Parameter(
-            Mandatory = $true,
-            Position = 0,
-            ValueFromPipeline = $true
-        )]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()]

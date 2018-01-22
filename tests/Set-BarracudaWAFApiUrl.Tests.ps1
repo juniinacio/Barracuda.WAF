@@ -16,21 +16,21 @@ InModuleScope Barracuda.WAF {
 
         It "should strip the path from the url" {
 
-            Set-BarracudaWAFApiUrl -Url "https://waf1.com/restapi/v1/login"
+            Set-BarracudaWAFApiUrl -Url "https://waf1.com/restapi/v3/login"
 
             $Script:BWAF_URI | Should BeExactly "https://waf1.com"
         }
 
         It "should strip the query string form the url" {
 
-            Set-BarracudaWAFApiUrl -Url "https://waf1.com/restapi/v1/login?test=blah"
+            Set-BarracudaWAFApiUrl -Url "https://waf1.com/restapi/v3/login?test=blah"
 
             $Script:BWAF_URI | Should BeExactly "https://waf1.com"
         }
 
         It "should accept pipeline input" {
 
-            "https://waf1.com/restapi/v1/login?test=blah" | Set-BarracudaWAFApiUrl
+            "https://waf1.com/restapi/v3/login?test=blah" | Set-BarracudaWAFApiUrl
 
             $Script:BWAF_URI | Should BeExactly "https://waf1.com"
         }

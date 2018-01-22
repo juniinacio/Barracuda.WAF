@@ -10,9 +10,9 @@ InModuleScope Barracuda.WAF {
         It "should generate the correct endpoint" {
             Mock Invoke-RestMethod {}
 
-            Invoke-BarracudaWAFApi -Path "/restapi/v1/login"
+            Invoke-BarracudaWAFApi -Path "/restapi/v3/login"
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/login" }
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/login" }
         }
 
         It "should include the request body" {
@@ -23,11 +23,11 @@ InModuleScope Barracuda.WAF {
                 password="admin"
             }
 
-            Invoke-BarracudaWAFApi -Path "restapi/v1/login" -PostData $postData -Method Post
+            Invoke-BarracudaWAFApi -Path "restapi/v3/login" -PostData $postData -Method Post
 
             $jsonData = $postData | ConvertTo-Json -Depth 4
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Body -eq $jsonData -and $Uri -eq "https://waf1.com/restapi/v1/login"}
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Body -eq $jsonData -and $Uri -eq "https://waf1.com/restapi/v3/login"}
         }
 
         It "should include the authorization header" {
@@ -37,9 +37,9 @@ InModuleScope Barracuda.WAF {
                 token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
             }
 
-            Invoke-BarracudaWAFApi -Path "restapi/v1/vsites"
+            Invoke-BarracudaWAFApi -Path "restapi/v3/vsites"
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/vsites" -and $Headers.ContainsKey('Authorization')}
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/vsites" -and $Headers.ContainsKey('Authorization')}
         }
 
         It "should encode the token" {
@@ -51,9 +51,9 @@ InModuleScope Barracuda.WAF {
 
             $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
 
-            Invoke-BarracudaWAFApi -Path "restapi/v1/vsites"
+            Invoke-BarracudaWAFApi -Path "restapi/v3/vsites"
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/vsites" -and $Headers.ContainsKey('Authorization') -and $Headers.Authorization -eq "Basic $encodedToken"}
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/vsites" -and $Headers.ContainsKey('Authorization') -and $Headers.Authorization -eq "Basic $encodedToken"}
         }
 
         It "should add the query string parameter" {
@@ -63,11 +63,11 @@ InModuleScope Barracuda.WAF {
                 token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
             }
             
-            Invoke-BarracudaWAFApi -Path '/restapi/v1/system' -Parameters @{
+            Invoke-BarracudaWAFApi -Path '/restapi/v3/system' -Parameters @{
                 parameters = 'cluster_shared_secret'
             }
 
-            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v1/system?parameters=cluster_shared_secret" -and $Headers.ContainsKey('Authorization') }
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/system?parameters=cluster_shared_secret" -and $Headers.ContainsKey('Authorization') }
         }
     }
 }
