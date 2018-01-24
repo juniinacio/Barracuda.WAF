@@ -23,65 +23,65 @@
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
 function New-Certificate {
-    [CmdletBinding(DefaultParameterSetName = 'Upload Information of Trusted Server Certificates')]
+    [CmdletBinding(DefaultParameterSetName = 'UploadTrustedServerCertificate')]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
         # AllowPrivateKeyExport help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [Alias('allow_private_key_export')]
         [ValidateSet('Yes', 'No')]
         [String]
         $AllowPrivateKeyExport,
 
         # City help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [ValidateNotNullOrEmpty()]
         [String]
         $City,
 
         # CommonName help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('common_name')]
         [ValidateNotNullOrEmpty()]
         [String]
         $CommonName,
 
         # CountryCode help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('country_code')]
         [ValidateNotNullOrEmpty()]
         [String]
         $CountryCode,
 
         # CurveType help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('curve_type')]
         [ValidateSet('secp256r1', 'secp384r1', 'secp512r1')]
         [String]
         $CurveType,
 
         # KeySize help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('key_size')]
         [ValidateSet('1024', '2048', '4096')]
         [String]
         $KeySize,
 
         # Name help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Trusted Server Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadTrustedServerCertificate')]
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Trusted CA Certificates')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
 
         # TrustedServerCertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'Upload Information of Trusted Server Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'UploadTrustedServerCertificate')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
         [String]
@@ -95,51 +95,51 @@ function New-Certificate {
         $TrustedCACertificateFilePath,
 
         # OrganizationName help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('organization_name')]
         [ValidateNotNullOrEmpty()]
         [String]
         $OrganizationName,
 
         # OrganizationUnit help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('organization_unit')]
         [ValidateNotNullOrEmpty()]
         [String]
         $OrganizationUnit,
 
         # SANCertificate help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [Alias('san_certificate')]
         [ValidateNotNullOrEmpty()]
         [String[]]
         $SANCertificate,
 
         # State help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
         [ValidateNotNullOrEmpty()]
         [String]
         $State,
 
         # Type help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [ValidateSet('pkcs12', 'pem')]
         [String]
         $Type,
 
         # KeyType help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [Alias('key_type')]
         [ValidateSet('rsa', 'ecdsa')]
         [String]
         $KeyType,
 
         # SignedCertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [Alias('signed_certificate')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
@@ -147,21 +147,21 @@ function New-Certificate {
         $SignedCertificateFilePath,
 
         # AssignAssociatedKey help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [Alias('assign_associated_key')]
         [ValidateSet('yes', 'no')]
         [String]
         $AssignAssociatedKey,
 
         # KeyFilePath help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
         [String]
         $KeyFilePath,
 
         # IntermediaryCertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [Alias('intermediary_certificate')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
@@ -169,7 +169,7 @@ function New-Certificate {
         $IntermediaryCertificateFilePath,
 
         # Password help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
         [ValidateNotNullOrEmpty()]        
         [SecureString]
         $Password
@@ -181,7 +181,7 @@ function New-Certificate {
         $headers = @{}
 
         switch ($PSCmdlet.ParameterSetName) {
-            'Upload Information of Trusted Server Certificates' {
+            'UploadTrustedServerCertificate' {
                 $boundary = [System.Guid]::NewGuid().ToString()
 
                 $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
@@ -205,7 +205,7 @@ Content-Disposition: form-data; name="{3}"; filename="{4}"
 '@              -f $boundary, 'name', $Name, 'trusted_server_certificate', $(Split-Path -Path $TrustedServerCertificateFilePath -Leaf),  $contents
             }
 
-            'Add Information of Certificates' {
+            'CreateSelfsignedCertificates' {
                 $postData = $PSBoundParameters | ConvertTo-PostData -ConcatChar '_'
             }
 
@@ -233,7 +233,7 @@ Content-Disposition: form-data; name="{3}"; filename="{4}"
 '@              -f $boundary, 'name', $Name, 'trusted_certificate', $(Split-Path -Path $TrustedCACertificateFilePath -Leaf),  $contents
             }
 
-            'Upload Information of Signed Certificates PEM' {
+            'UploadPEMCertificates' {
                 if ($AssignAssociatedKey -eq 'yes') {
                     if ([string]::IsNullOrWhiteSpace($KeyFilePath)) {
                         throw "Parameter KeyFilePath is mandatory when AssignAssociatedKey is set to `"yes`"."
@@ -308,7 +308,7 @@ $keyFile
 "@
             }
 
-            'Upload Information of Signed Certificates PKCS12' {
+            'UploadPKCS12Certificates' {
                 $boundary = [System.Guid]::NewGuid().ToString()
 
                 $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
