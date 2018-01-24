@@ -125,5 +125,23 @@ InModuleScope Barracuda.WAF {
                 -and    $PostData -match '(?m)^V3ryC0mpl#x' `
             } -Scope It
         }
+
+        It "should throw an exception when assign associated key is yes and no key file is given" {
+            Mock Invoke-Api {}
+    
+            $certPath = Join-Path -Path $PSScriptRoot -ChildPath 'Files\DummyCert_Root_CA.crt'
+    
+            $params = @{
+                Name = 'DummyCert Pem Certificate'
+                Type = 'pem'
+                KeyType = 'ecdsa'
+                SignedCertificateFilePath = $certPath
+                AssignAssociatedKey = 'yes'
+                IntermediaryCertificateFilePath = $certPath
+                AllowPrivateKeyExport = 'no'
+            }
+            
+            {New-BarracudaWAFCertificate @params} | Should Throw
+        }
     }
 }
