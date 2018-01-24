@@ -23,7 +23,7 @@
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
 function New-Certificate {
-    [CmdletBinding(DefaultParameterSetName = 'UploadTrustedServerCertificate')]
+    [CmdletBinding(DefaultParameterSetName = 'UploadTrustedServerCertificates')]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
@@ -71,8 +71,8 @@ function New-Certificate {
         $KeySize,
 
         # Name help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadTrustedServerCertificate')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Trusted CA Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadTrustedServerCertificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadTrustedCACertificates')]
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPKCS12Certificates')]
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'UploadPEMCertificates')]
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'CreateSelfsignedCertificates')]
@@ -81,14 +81,14 @@ function New-Certificate {
         $Name,
 
         # TrustedServerCertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'UploadTrustedServerCertificate')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'UploadTrustedServerCertificates')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
         [String]
         $TrustedServerCertificateFilePath,
 
         # TrustedCACertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'Upload Information of Trusted CA Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'UploadTrustedCACertificates')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
         [String]
@@ -181,7 +181,7 @@ function New-Certificate {
         $headers = @{}
 
         switch ($PSCmdlet.ParameterSetName) {
-            'UploadTrustedServerCertificate' {
+            'UploadTrustedServerCertificates' {
                 $boundary = [System.Guid]::NewGuid().ToString()
 
                 $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
@@ -206,10 +206,10 @@ Content-Disposition: form-data; name="{3}"; filename="{4}"
             }
 
             'CreateSelfsignedCertificates' {
-                $postData = $PSBoundParameters | ConvertTo-PostData -ConcatChar '_'
+                $postData = $PSBoundParameters | ConvertTo-PostData -Separator '_'
             }
 
-            'Upload Information of Trusted CA Certificates' {
+            'UploadTrustedCACertificates' {
                 $boundary = [System.Guid]::NewGuid().ToString()
 
                 $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
