@@ -92,7 +92,7 @@ InModuleScope Barracuda.WAF {
             } -Scope It
         }
 
-        It "should uploading pkcs12 certificates" {
+        It "should support uploading pkcs12 certificates" {
             Mock Invoke-Api {}
     
             $certPath = Join-Path -Path $PSScriptRoot -ChildPath 'Files\Star.example.com.p12'
