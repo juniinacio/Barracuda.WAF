@@ -54,7 +54,7 @@ InModuleScope Barracuda.WAF {
             Assert-MockCalled Invoke-Api -ParameterFilter { $Path -eq "restapi/v3/certificates" -and $Parameters.upload -eq 'trusted' -and $Method -eq 'Post' -and $Headers.'Content-Type' -like 'multipart/form-data; boundary="*"' -and $PostData -like '*Content-Disposition: form-data; name="name"*' -and $PostData -like '*Content-Disposition: form-data; name="trusted_certificate"; filename="*"*' } -Scope It
         }
 
-        It "should upload information of signed certificates" {
+        It "should upload information of signed pem certificates" {
             Mock Invoke-Api {}
     
             $certPath = Join-Path -Path $PSScriptRoot -ChildPath 'Files\DummyCert_Root_CA.crt'
@@ -64,11 +64,10 @@ InModuleScope Barracuda.WAF {
                 Type = 'pem'
                 KeyType = 'ecdsa'
                 SignedCertificateFilePath = $certPath
-                AssignAssociatedKey = 'no'
+                AssignAssociatedKey = 'yes'
                 KeyFilePath = $certPath
                 IntermediaryCertificateFilePath = $certPath
                 AllowPrivateKeyExport = 'no'
-                Password = ConvertTo-SecureString -String 'V3ryC0mpl#x' -AsPlainText -Force
             }
             New-BarracudaWAFCertificate @params 
     
@@ -84,6 +83,34 @@ InModuleScope Barracuda.WAF {
                 -and    $PostData -like '*Content-Disposition: form-data; name="assign_associated_key"*' `
                 -and    $PostData -like '*Content-Disposition: form-data; name="key"; filename="*"*' `
                 -and    $PostData -like '*Content-Disposition: form-data; name="intermediary_certificate"; filename="*"*' `
+                -and    $PostData -like '*Content-Disposition: form-data; name="allow_private_key_export"*'
+            } -Scope It
+        }
+
+        It "should upload information of signed pkcs12 certificates" {
+            Mock Invoke-Api {}
+    
+            $certPath = Join-Path -Path $PSScriptRoot -ChildPath 'Files\DummyCert_Root_CA.crt'
+    
+            $params = @{
+                Name = 'DummyCert Signed Certificate'
+                Type = 'pkcs12'
+                KeyType = 'rsa'
+                SignedCertificateFilePath = $certPath
+                AllowPrivateKeyExport = 'no'
+                Password = ConvertTo-SecureString -String 'V3ryC0mpl#x' -AsPlainText -Force
+            }
+            New-BarracudaWAFCertificate @params 
+    
+            Assert-MockCalled Invoke-Api -ParameterFilter {
+                        $Path -eq "restapi/v3/certificates" `
+                -and    $Parameters.upload -eq 'signed' `
+                -and    $Method -eq 'Post' `
+                -and    $Headers.'Content-Type' -like 'multipart/form-data; boundary="*"' `
+                -and    $PostData -like '*Content-Disposition: form-data; name="name"*' `
+                -and    $PostData -like '*Content-Disposition: form-data; name="type"*' `
+                -and    $PostData -like '*Content-Disposition: form-data; name="key_type"*' `
+                -and    $PostData -like '*Content-Disposition: form-data; name="signed_certificate"; filename="*"*' `
                 -and    $PostData -like '*Content-Disposition: form-data; name="allow_private_key_export"*' `
                 -and    $PostData -like '*Content-Disposition: form-data; name="password"*'
             } -Scope It

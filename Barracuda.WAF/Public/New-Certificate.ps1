@@ -29,7 +29,8 @@ function New-Certificate {
     Param (
         # AllowPrivateKeyExport help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [Alias('allow_private_key_export')]
         [ValidateSet('Yes', 'No')]
         [String]
@@ -72,7 +73,8 @@ function New-Certificate {
         # Name help description
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Trusted Server Certificates')]
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Trusted CA Certificates')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
         [ValidateNotNullOrEmpty()]
         [String]
@@ -120,20 +122,24 @@ function New-Certificate {
         $State,
 
         # Type help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [ValidateSet('pkcs12', 'pem')]
         [String]
         $Type,
 
         # KeyType help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Add Information of Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [Alias('key_type')]
         [ValidateSet('rsa', 'ecdsa')]
         [String]
         $KeyType,
 
         # SignedCertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [Alias('signed_certificate')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
@@ -141,21 +147,21 @@ function New-Certificate {
         $SignedCertificateFilePath,
 
         # AssignAssociatedKey help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [Alias('assign_associated_key')]
         [ValidateSet('yes', 'no')]
         [String]
         $AssignAssociatedKey,
 
         # KeyFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
         [String]
         $KeyFilePath,
 
         # IntermediaryCertificateFilePath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $false, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PEM')]
         [Alias('intermediary_certificate')]
         [ValidateScript({Test-Path -Path $_ -PathType Leaf})]
         [ValidateNotNullOrEmpty()]
@@ -163,7 +169,7 @@ function New-Certificate {
         $IntermediaryCertificateFilePath,
 
         # Password help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates')]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Upload Information of Signed Certificates PKCS12')]
         [ValidateNotNullOrEmpty()]        
         [SecureString]
         $Password
@@ -227,7 +233,13 @@ Content-Disposition: form-data; name="{3}"; filename="{4}"
 '@              -f $boundary, 'name', $Name, 'trusted_certificate', $(Split-Path -Path $TrustedCACertificateFilePath -Leaf),  $contents
             }
 
-            'Upload Information of Signed Certificates' {
+            'Upload Information of Signed Certificates PEM' {
+                if ($AssignAssociatedKey -eq 'yes') {
+                    if ([string]::IsNullOrWhiteSpace($KeyFilePath)) {
+                        throw "Parameter KeyFilePath is mandatory when AssignAssociatedKey is set to `"yes`"."
+                    }
+                }
+
                 $boundary = [System.Guid]::NewGuid().ToString()
 
                 $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
@@ -240,21 +252,27 @@ Content-Disposition: form-data; name="{3}"; filename="{4}"
                 
                 $signedCertificateFileName = Split-Path -Path $SignedCertificateFilePath -Leaf
 
-                $allBytes = [System.Io.File]::ReadAllBytes($KeyFilePath)
+                if ($AssignAssociatedKey -eq 'yes') {
 
-                $keyFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
-                
-                $keyFileName = Split-Path -Path $KeyFilePath -Leaf
+                    $allBytes = [System.Io.File]::ReadAllBytes($KeyFilePath)
+
+                    $keyFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    
+                    $keyFileName = Split-Path -Path $KeyFilePath -Leaf
+
+                    $keyFile = @"
+Content-Disposition: form-data; name=`"key`"; filename=`"$keyFileName`"
+                    
+$keyFileContent
+--$boundary
+"@
+                }
 
                 $allBytes = [System.Io.File]::ReadAllBytes($IntermediaryCertificateFilePath)
 
                 $intermediaryCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
                 
                 $intermediaryCertificateFileName = Split-Path -Path $IntermediaryCertificateFilePath -Leaf
-
-                $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
-
-                $clearPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
 
                 $postData = @"
 --$boundary
@@ -278,13 +296,52 @@ Content-Disposition: form-data; name=`"assign_associated_key`"
 
 $AssignAssociatedKey
 --$boundary
-Content-Disposition: form-data; name=`"key`"; filename=`"$keyFileName`"
-
-$keyFileContent
---$boundary
 Content-Disposition: form-data; name=`"intermediary_certificate`"; filename=`"$intermediaryCertificateFileName`"
 
 $intermediaryCertificateFileContent
+--$boundary
+Content-Disposition: form-data; name=`"allow_private_key_export`" 
+
+$AllowPrivateKeyExport
+--$boundary
+$keyFile
+"@
+            }
+
+            'Upload Information of Signed Certificates PKCS12' {
+                $boundary = [System.Guid]::NewGuid().ToString()
+
+                $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
+
+                $parameters.upload = 'signed'
+                
+                $allBytes = [System.Io.File]::ReadAllBytes($SignedCertificateFilePath)
+
+                $signedCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                
+                $signedCertificateFileName = Split-Path -Path $SignedCertificateFilePath -Leaf
+
+                $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+
+                $clearPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+
+                $postData = @"
+--$boundary
+Content-Disposition: form-data; name=`"name`" 
+
+$Name
+--$boundary
+Content-Disposition: form-data; name=`"type`" 
+
+$Type
+--$boundary
+Content-Disposition: form-data; name=`"key_type`" 
+
+$KeyType
+--$boundary
+Content-Disposition: form-data; name=`"signed_certificate`"; filename=`"$signedCertificateFileName`"
+
+$signedCertificateFileContent
 --$boundary
 Content-Disposition: form-data; name=`"allow_private_key_export`" 
 
