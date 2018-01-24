@@ -76,7 +76,7 @@ function Invoke-Api
 
             $requestParameters.Uri = $builder.ToString()
 
-            $newHeaders = $Script:DEFAULT_HEADERS
+            $newHeaders = $Script:DEFAULT_HEADERS.Clone()
             if ($Script:BWAF_TOKEN -ne $null) {
                 Write-Verbose "Adding authorization header..."
                 $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
