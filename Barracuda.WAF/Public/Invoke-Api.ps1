@@ -63,6 +63,7 @@ function Invoke-Api
             $builder.Path = $Path
             
             if ($PSBoundParameters.ContainsKey('Parameters')) {
+                Write-Verbose "Adding query string parameters..."
                 $Parameters.GetEnumerator() |
                     ForEach-Object {
                         if ($builder.Query -ne $null -and $builder.Query.Length -gt 1) {
@@ -77,6 +78,7 @@ function Invoke-Api
 
             $newHeaders = $Script:DEFAULT_HEADERS
             if ($Script:BWAF_TOKEN -ne $null) {
+                Write-Verbose "Adding authorization header..."
                 $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
                 $newHeaders.Authorization = "Basic {0}" -f $encodedToken
             }
@@ -84,6 +86,7 @@ function Invoke-Api
             if ($PSBoundParameters.ContainsKey('Headers')) {
                 $Headers.GetEnumerator() |
                 ForEach-Object {
+                    Write-Verbose "Adding header $($_.Key)..."
                     $newHeaders.$($_.Key) = $_.Value
                 }
             }
@@ -94,15 +97,18 @@ function Invoke-Api
             $requestParameters.Headers = $newHeaders
 
             if ($PSBoundParameters.ContainsKey('PostData')) {
-                
-                $body = $PostData
-                if ($body -is [Hashtable]) {
-                    $body = $PostData | ConvertTo-Json -Depth 10
+                Write-Verbose "Adding payload data..."
+
+                if ($PostData -is [Hashtable]) {
+                    Write-Verbose "Converting body to json..."
+                    $requestParameters.Body = $PostData | ConvertTo-Json -Depth 10
+                } else {
+                    $requestParameters.Body = $PostData
                 }
                 
-                Write-Debug "Body: `n$body`n"
+                Write-Debug "Payload: `n$($requestParameters.Body)`n"
                 
-                $requestParameters.Body = $body
+                
             }
             
             if ($PSBoundParameters.ContainsKey('Method')) {
