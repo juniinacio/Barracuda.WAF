@@ -29,29 +29,29 @@ function Get-Service {
     Param (
         # WebApplicationName help description
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
-        [ValidateNotNullOrEmpty()]        
+        [ValidateNotNullOrEmpty()]
         [String[]]
         $WebApplicationName
     )
 
     process {
-        if ($PSBoundParameters.ContainsKey('WebApplicationName')) {
-            foreach ($name in $WebApplicationName) {
-                try {
+        try {
+            if ($PSBoundParameters.ContainsKey('WebApplicationName')) {
+                foreach ($name in $WebApplicationName) {
                     Invoke-API -Path $('/restapi/v3/services/{0}' -f $name)
-                } catch {
-                    if ($_.Exception -is [System.Net.WebException]) {
-                        Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
-                        if ($_.Exception.Response.StatusCode -ne 404) {
-                            throw
-                        }
-                    } else {
-                        throw
-                    }
                 }
+            } else {
+                Invoke-API -Path '/restapi/v3/services'
             }
-        } else {
-            Invoke-API -Path '/restapi/v3/services'
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+                if ($_.Exception.Response.StatusCode -ne 404) {
+                    throw
+                }
+            } else {
+                throw
+            }
         }
     }
 }
