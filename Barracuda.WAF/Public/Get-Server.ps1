@@ -41,23 +41,23 @@ function Get-Server {
     )
 
     process {
-        if ($PSBoundParameters.ContainsKey('ServerName')) {
-            foreach ($name in $ServerName) {
-                try {
+        try {
+            if ($PSBoundParameters.ContainsKey('ServerName')) {
+                foreach ($name in $ServerName) {
                     Invoke-API -Path $('/restapi/v3/services/{0}/servers/{1}' -f $WebApplicationName, $name) -Method Get
-                } catch {
-                    if ($_.Exception -is [System.Net.WebException]) {
-                        Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
-                        if ($_.Exception.Response.StatusCode -ne 404) {
-                            throw
-                        }
-                    } else {
-                        throw
-                    }
                 }
+            } else {
+                Invoke-API -Path $('/restapi/v3/services/{0}/servers' -f $WebApplicationName) -Method Get
             }
-        } else {
-            Invoke-API -Path $('/restapi/v3/services/{0}/servers' -f $WebApplicationName) -Method Get
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+                if ($_.Exception.Response.StatusCode -ne 404) {
+                    throw
+                }
+            } else {
+                throw
+            }
         }
     }
 }

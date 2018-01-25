@@ -53,34 +53,33 @@ function Get-RuleGroup {
     )
 
     process {
+        try {
+            $params = @{}
 
-        $params = @{}
-
-        if ($PSBoundParameters.ContainsKey('Groups')) {
-            $params.groups = $Groups -join ','
-        }
-
-        if ($PSBoundParameters.ContainsKey('Parameters')) {
-            $params.parameters = $Parameters -join ','
-        }
-
-        if ($PSBoundParameters.ContainsKey('RuleGroupName')) {
-            foreach ($name in $RuleGroupName) {
-                try {
-                    Invoke-API -Path $('/restapi/v3/services/{0}/content-rules/{1}' -f $WebApplicationName, $name) -Method Get -Parameters $params
-                } catch {
-                    if ($_.Exception -is [System.Net.WebException]) {
-                        Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
-                        if ($_.Exception.Response.StatusCode -ne 404) {
-                            throw
-                        }
-                    } else {
-                        throw
-                    }
-                }
+            if ($PSBoundParameters.ContainsKey('Groups')) {
+                $params.groups = $Groups -join ','
             }
-        } else {
-            Invoke-API -Path $('/restapi/v3/services/{0}/content-rules' -f $WebApplicationName) -Method Get -Parameters $params
+
+            if ($PSBoundParameters.ContainsKey('Parameters')) {
+                $params.parameters = $Parameters -join ','
+            }
+
+            if ($PSBoundParameters.ContainsKey('RuleGroupName')) {
+                foreach ($name in $RuleGroupName) {
+                    Invoke-API -Path $('/restapi/v3/services/{0}/content-rules/{1}' -f $WebApplicationName, $name) -Method Get -Parameters $params
+                }
+            } else {
+                Invoke-API -Path $('/restapi/v3/services/{0}/content-rules' -f $WebApplicationName) -Method Get -Parameters $params
+            }
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+                if ($_.Exception.Response.StatusCode -ne 404) {
+                    throw
+                }
+            } else {
+                throw
+            }
         }
     }
 }
