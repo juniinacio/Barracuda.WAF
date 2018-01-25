@@ -70,6 +70,7 @@ function Get-RuleGroup {
                     Invoke-API -Path $('/restapi/v3/services/{0}/content-rules/{1}' -f $WebApplicationName, $name) -Method Get -Parameters $params
                 } catch {
                     if ($_.Exception -is [System.Net.WebException]) {
+                        Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
                         if ($_.Exception.Response.StatusCode -ne 404) {
                             throw
                         }

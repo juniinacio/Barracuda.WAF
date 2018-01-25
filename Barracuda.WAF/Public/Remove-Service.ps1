@@ -42,6 +42,7 @@ function Remove-Service {
                 Invoke-API -Path ('/restapi/v3/services/{0}' -f $name) -Method Delete
             } catch {
                 if ($_.Exception -is [System.Net.WebException]) {
+                    Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
                     if ($_.Exception.Response.StatusCode -ne 404) {
                         throw
                     }

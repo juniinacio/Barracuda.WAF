@@ -95,17 +95,23 @@ function Update-Server {
     )
 
     process {
-        $PSBoundParameters.Remove('WebApplicationName')
-        $PSBoundParameters.Remove('ServerName')
+        try {
+            $PSBoundParameters.Remove('WebApplicationName')
+            $PSBoundParameters.Remove('ServerName')
 
-        if ($PSBoundParameters.ContainsKey('NewServerName')) {
-            $PSBoundParameters['Name'] = $NewServerName
+            if ($PSBoundParameters.ContainsKey('NewServerName')) {
+                $PSBoundParameters['Name'] = $NewServerName
+            }
+
+            $PSBoundParameters.Remove('NewServerName')
+
+            $PSBoundParameters |
+                ConvertTo-PostData |
+                    Invoke-API -Path ('/restapi/v3/services/{0}/servers/{1}' -f $WebApplicationName, $ServerName) -Method Put
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
         }
-
-        $PSBoundParameters.Remove('NewServerName')
-
-        $PSBoundParameters |
-            ConvertTo-PostData |
-                Invoke-API -Path ('/restapi/v3/services/{0}/servers/{1}' -f $WebApplicationName, $ServerName) -Method Put
     }
 }

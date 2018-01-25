@@ -143,9 +143,14 @@ function New-Service {
     )
 
     process {
-
-        $PSBoundParameters |
-            ConvertTo-PostData |
-                Invoke-API -Path '/restapi/v3/services' -Method Post
+        try {
+            $PSBoundParameters |
+                ConvertTo-PostData |
+                    Invoke-API -Path '/restapi/v3/services' -Method Post
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
+        }
     }
 }

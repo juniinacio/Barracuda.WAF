@@ -48,8 +48,14 @@ function Update-ServiceGroup {
     )
     
     process {
-        @{
-            'service-group' = $NewServiceGroup
-        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $ServiceGroup) -Method Put
+        try {
+            @{
+                'service-group' = $NewServiceGroup
+            } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $ServiceGroup) -Method Put
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
+        }
     }
 }

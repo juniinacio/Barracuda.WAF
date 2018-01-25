@@ -48,6 +48,7 @@ function Get-ServiceGroup {
                     Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups/{1}' -f $VSite, $n) -Method Get
                 } catch {
                     if ($_.Exception -is [System.Net.WebException]) {
+                        Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
                         if ($_.Exception.Response.StatusCode -ne 404) {
                             throw
                         }

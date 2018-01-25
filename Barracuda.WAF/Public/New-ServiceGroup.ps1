@@ -42,8 +42,14 @@ function New-ServiceGroup {
     )
     
     process {
-        @{
-            'service-group' = $Name
-        } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups' -f $VSite) -Method Post
+        try {
+            @{
+                'service-group' = $Name
+            } | Invoke-API -Path $('/restapi/v3/vsites/{0}/service-groups' -f $VSite) -Method Post
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
+        }
     }
 }

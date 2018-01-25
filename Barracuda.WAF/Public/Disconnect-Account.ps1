@@ -29,7 +29,14 @@ function Disconnect-Account {
     Param ()
     
     process {
-        Invoke-API -Path '/restapi/v3/logout' -Method Delete
+        try {
+            Invoke-API -Path '/restapi/v3/logout' -Method Delete
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
+            throw
+        }
     }
 
     end {

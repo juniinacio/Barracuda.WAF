@@ -176,105 +176,110 @@ function New-Certificate {
     )
     
     process {
-        $parameters = @{}
-        
-        $headers = @{}
+        try {
+            $parameters = @{}
+            
+            $headers = @{}
 
-        switch ($PSCmdlet.ParameterSetName) {
-            'UploadTrustedServerCertificates' {
-                $boundary = [System.Guid]::NewGuid().ToString()
+            switch ($PSCmdlet.ParameterSetName) {
+                'UploadTrustedServerCertificates' {
+                    $boundary = [System.Guid]::NewGuid().ToString()
 
-                $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
+                    $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
 
-                $parameters.upload = 'trusted_server'
-                
-                $allBytes = [System.Io.File]::ReadAllBytes($TrustedServerCertificateFilePath)
+                    $parameters.upload = 'trusted_server'
+                    
+                    $allBytes = [System.Io.File]::ReadAllBytes($TrustedServerCertificateFilePath)
 
-                $contents = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    $trustedServerCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
 
-                $postData = @'
---{0}
-Content-Disposition: form-data; name="{1}" 
+                    $trustedServerCertificateFileName = Split-Path -Path $TrustedServerCertificateFilePath -Leaf
 
-{2}
---{0}
-Content-Disposition: form-data; name="{3}"; filename="{4}"
+                    $postData = @"
+--$boundary
+Content-Disposition: form-data; name=`"name`" 
 
-{5}
---{0}
-'@              -f $boundary, 'name', $Name, 'trusted_server_certificate', $(Split-Path -Path $TrustedServerCertificateFilePath -Leaf),  $contents
-            }
+$Name
+--$boundary
+Content-Disposition: form-data; name=`"trusted_server_certificate`"; filename=`"$trustedServerCertificateFileName`"
 
-            'CreateSelfsignedCertificates' {
-                $postData = $PSBoundParameters | ConvertTo-PostData -Separator '_'
-            }
-
-            'UploadTrustedCACertificates' {
-                $boundary = [System.Guid]::NewGuid().ToString()
-
-                $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
-
-                $parameters.upload = 'trusted'
-                
-                $allBytes = [System.Io.File]::ReadAllBytes($TrustedCACertificateFilePath)
-
-                $contents = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
-
-                $postData = @'
---{0}
-Content-Disposition: form-data; name="{1}" 
-
-{2}
---{0}
-Content-Disposition: form-data; name="{3}"; filename="{4}"
-
-{5}
---{0}
-'@              -f $boundary, 'name', $Name, 'trusted_certificate', $(Split-Path -Path $TrustedCACertificateFilePath -Leaf),  $contents
-            }
-
-            'UploadPEMCertificates' {
-                if ($AssignAssociatedKey -eq 'yes') {
-                    if ([string]::IsNullOrWhiteSpace($KeyFilePath)) {
-                        throw "Parameter KeyFilePath is mandatory when AssignAssociatedKey is set to `"yes`"."
-                    }
+$trustedServerCertificateFileContent
+--$boundary
+"@
                 }
 
-                $boundary = [System.Guid]::NewGuid().ToString()
+                'CreateSelfsignedCertificates' {
+                    $postData = $PSBoundParameters | ConvertTo-PostData -Separator '_'
+                }
 
-                $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
+                'UploadTrustedCACertificates' {
+                    $boundary = [System.Guid]::NewGuid().ToString()
 
-                $parameters.upload = 'signed'
-                
-                $allBytes = [System.Io.File]::ReadAllBytes($SignedCertificateFilePath)
+                    $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
 
-                $signedCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
-                
-                $signedCertificateFileName = Split-Path -Path $SignedCertificateFilePath -Leaf
-
-                if ($AssignAssociatedKey -eq 'yes') {
-
-                    $allBytes = [System.Io.File]::ReadAllBytes($KeyFilePath)
-
-                    $keyFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    $parameters.upload = 'trusted'
                     
-                    $keyFileName = Split-Path -Path $KeyFilePath -Leaf
+                    $allBytes = [System.Io.File]::ReadAllBytes($TrustedCACertificateFilePath)
 
-                    $keyFile = @"
+                    $trustedCACertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    
+                    $trustedCACertificateFileName = Split-Path -Path $TrustedCACertificateFilePath -Leaf
+
+                    $postData = @"
+--$boundary
+Content-Disposition: form-data; name=`"name`" 
+
+$Name
+--$boundary
+Content-Disposition: form-data; name=`"trusted_certificate`"; filename=`"$trustedCACertificateFileName`"
+
+$trustedCACertificateFileContent
+--$boundary
+"@
+                }
+
+                'UploadPEMCertificates' {
+                    if ($AssignAssociatedKey -eq 'yes') {
+                        if ([string]::IsNullOrWhiteSpace($KeyFilePath)) {
+                            throw "Parameter KeyFilePath is mandatory when AssignAssociatedKey is set to `"yes`"."
+                        }
+                    }
+
+                    $boundary = [System.Guid]::NewGuid().ToString()
+
+                    $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
+
+                    $parameters.upload = 'signed'
+                    
+                    $allBytes = [System.Io.File]::ReadAllBytes($SignedCertificateFilePath)
+
+                    $signedCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    
+                    $signedCertificateFileName = Split-Path -Path $SignedCertificateFilePath -Leaf
+
+                    if ($AssignAssociatedKey -eq 'yes') {
+
+                        $allBytes = [System.Io.File]::ReadAllBytes($KeyFilePath)
+
+                        $keyFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                        
+                        $keyFileName = Split-Path -Path $KeyFilePath -Leaf
+
+                        $keyFile = @"
 Content-Disposition: form-data; name=`"key`"; filename=`"$keyFileName`"
                     
 $keyFileContent
 --$boundary
 "@
-                }
+                    }
 
-                $allBytes = [System.Io.File]::ReadAllBytes($IntermediaryCertificateFilePath)
+                    $allBytes = [System.Io.File]::ReadAllBytes($IntermediaryCertificateFilePath)
 
-                $intermediaryCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
-                
-                $intermediaryCertificateFileName = Split-Path -Path $IntermediaryCertificateFilePath -Leaf
+                    $intermediaryCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    
+                    $intermediaryCertificateFileName = Split-Path -Path $IntermediaryCertificateFilePath -Leaf
 
-                $postData = @"
+                    $postData = @"
 --$boundary
 Content-Disposition: form-data; name=`"name`" 
 
@@ -306,26 +311,26 @@ $AllowPrivateKeyExport
 --$boundary
 $keyFile
 "@
-            }
+                }
 
-            'UploadPKCS12Certificates' {
-                $boundary = [System.Guid]::NewGuid().ToString()
+                'UploadPKCS12Certificates' {
+                    $boundary = [System.Guid]::NewGuid().ToString()
 
-                $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
+                    $headers.'Content-Type' = 'multipart/form-data; boundary="{0}"' -f $boundary
 
-                $parameters.upload = 'signed'
-                
-                $allBytes = [System.Io.File]::ReadAllBytes($SignedCertificateFilePath)
+                    $parameters.upload = 'signed'
+                    
+                    $allBytes = [System.Io.File]::ReadAllBytes($SignedCertificateFilePath)
 
-                $signedCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
-                
-                $signedCertificateFileName = Split-Path -Path $SignedCertificateFilePath -Leaf
+                    $signedCertificateFileContent = ([System.Text.Encoding]::GetEncoding("iso-8859-1")).GetString($allBytes)
+                    
+                    $signedCertificateFileName = Split-Path -Path $SignedCertificateFilePath -Leaf
 
-                $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+                    $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
 
-                $clearPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+                    $clearPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
 
-                $postData = @"
+                    $postData = @"
 --$boundary
 Content-Disposition: form-data; name=`"name`" 
 
@@ -352,26 +357,14 @@ Content-Disposition: form-data; name=`"password`"
 $clearPassword
 --$boundary
 "@
-            }
-        }
-
-        try {
-            Invoke-API -Path 'restapi/v3/certificates' -Method Post -PostData $postData -Headers $headers -Parameters $parameters
-        } catch {
-            if ($PSVersionTable.PSVersion.Major -lt 6) {
-                if ($_.Exception.Response) {  
-                    $streamReader = New-Object -TypeName 'System.IO.StreamReader' -ArgumentList $_.Exception.Response.GetResponseStream()
-                    $streamReader.BaseStream.Position = 0
-                    $streamReader.DiscardBufferedData()
-                    $responseBody = $streamReader.ReadToEnd()
                 }
             }
-            else {
-                $responseBody = $_.ErrorDetails.Message
+
+            Invoke-API -Path 'restapi/v3/certificates' -Method Post -PostData $postData -Headers $headers -Parameters $parameters
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
             }
-
-            Write-Debug "ResponseBody: `n$responseBody`n"
-
             throw
         }
     }

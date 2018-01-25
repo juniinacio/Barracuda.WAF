@@ -40,11 +40,21 @@ function Connect-Account {
     }
     
     process {
-        $postData = @{
-            username = $Credential.GetNetworkCredential().UserName
-            password = $Credential.GetNetworkCredential().Password
+        $networkCredential = $Credential.GetNetworkCredential()
+
+        $postData = @{}
+
+        $postData.username = $networkCredential.UserName
+        $postData.password = $networkCredential.Password
+
+        try {
+            $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v3/login' -Method Post -PostData $postData
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
+            throw
         }
-        $Script:BWAF_TOKEN = Invoke-API -Path '/restapi/v3/login' -Method Post -PostData $postData
     }
 
     end {

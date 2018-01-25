@@ -151,16 +151,21 @@ function Update-Service {
     )
 
     process {
+        try {
+            $PSBoundParameters.Remove('WebApplicationName')
 
-        $PSBoundParameters.Remove('WebApplicationName')
+            if ($PSBoundParameters.ContainsKey('NewWebApplicationName')) {
+                $PSBoundParameters['Name'] = $NewWebApplicationName
+                $PSBoundParameters.Remove('NewWebApplicationName')
+            }
 
-        if ($PSBoundParameters.ContainsKey('NewWebApplicationName')) {
-            $PSBoundParameters['Name'] = $NewWebApplicationName
-            $PSBoundParameters.Remove('NewWebApplicationName')
+            $PSBoundParameters |
+                ConvertTo-PostData |
+                    Invoke-API -Path ('/restapi/v3/services/{0}' -f $WebApplicationName) -Method Put 
+        } catch {
+            if ($_.Exception -is [System.Net.WebException]) {
+                Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
+            }
         }
-
-        $PSBoundParameters |
-            ConvertTo-PostData |
-                Invoke-API -Path ('/restapi/v3/services/{0}' -f $WebApplicationName) -Method Put
     }
 }

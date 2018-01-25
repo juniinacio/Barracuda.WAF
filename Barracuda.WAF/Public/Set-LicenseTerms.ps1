@@ -49,21 +49,25 @@ function Set-LicenseTerms {
     )
     
     process {
-        $PSBoundParameters.Remove("SKU") | Out-Null
+        try {
+            $PSBoundParameters.Remove("SKU")
 
-        switch ($SKU) {
-            Default {
-                $fields = Get-LicenseInputFields @PSBoundParameters
-                if ($fields) {
-                    $params = @{
-                        Uri = $Script:BWAF_URI
-                        UseBasicParsing = $true
-                        Body = $fields
-                        Method  = 'Post'
+            switch ($SKU) {
+                Default {
+                    $fields = Get-LicenseInputFields @PSBoundParameters
+                    if ($fields) {
+                        $params = @{
+                            Uri = $Script:BWAF_URI
+                            UseBasicParsing = $true
+                            Body = $fields
+                            Method  = 'Post'
+                        }
+                        Invoke-WebRequest @params
                     }
-                    Invoke-WebRequest @params
                 }
             }
+        } catch {
+            throw
         }
     }
 }
