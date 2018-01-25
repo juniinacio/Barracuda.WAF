@@ -22,14 +22,14 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Get-LocalhostInformation {
+function Get-SystemLocationInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
         # Parameters help description
         [Parameter(Mandatory = $false)]
-        [ValidateSet('hostname', 'ip-address')]
+        [ValidateSet('country', 'rack', 'slot')]
         [String[]]
         $Parameters
     )
@@ -42,7 +42,7 @@ function Get-LocalhostInformation {
                 $params.parameters = $Parameters -join ','
             }
 
-            Invoke-API -Path '/restapi/v3/system/local-hosts' -Method Get -Parameters $params
+            Invoke-API -Path '/restapi/v3/system/location' -Method Get -Parameters $params
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"

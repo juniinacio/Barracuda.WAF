@@ -22,27 +22,16 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Get-LocationInformation {
+function Get-SystemBackupInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # Parameters help description
-        [Parameter(Mandatory = $false)]
-        [ValidateSet('country', 'rack', 'slot')]
-        [String[]]
-        $Parameters
     )
 
     process {
         try {
-            $params = @{}
-            
-            if ($PSBoundParameters.ContainsKey('Parameters')) {
-                $params.parameters = $Parameters -join ','
-            }
-
-            Invoke-API -Path '/restapi/v3/system/location' -Method Get -Parameters $params
+            Invoke-API -Path '/restapi/v3/backup' -Method Get
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"

@@ -2,26 +2,26 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "Get-BarracudaWAFDnsInformation" {
+    Describe "Get-BarracudaWAFSystemLocalhostInformation" {
 
-        It "should retrieve information of dns" {
+        It "should retrieve information of local hosts" {
             Mock Invoke-Api {}
-
-            Get-BarracudaWAFDnsInformation
+            
+            Get-BarracudaWAFSystemLocalhostInformation
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
-                        $Path -eq "/restapi/v3/system/dns" `
+                        $Path -eq "/restapi/v3/system/local-hosts" `
                 -and    $Method -eq 'Get'
             } -Scope It
         }
 
-        It "should retrieve a specific dns information parameter" {
+        It "should retrieve a specific local host information parameter" {
             Mock Invoke-Api {}
             
-            Get-BarracudaWAFDnsInformation -Parameters 'primary-dns-server'
+            Get-BarracudaWAFSystemLocalhostInformation -Parameters 'hostname'
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
-                        $Path -eq "/restapi/v3/system/dns" `
+                        $Path -eq "/restapi/v3/system/local-hosts" `
                 -and    $Method -eq 'Get'
             } -Scope It
         }

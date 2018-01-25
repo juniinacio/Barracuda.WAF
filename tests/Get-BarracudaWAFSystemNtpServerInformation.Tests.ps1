@@ -2,12 +2,12 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "Get-BarracudaWAFNtpServerInformation" {
+    Describe "Get-BarracudaWAFSystemNtpServerInformation" {
 
         It "should retrieve information of ntp servers" {
             Mock Invoke-Api {}
 
-            Get-BarracudaWAFNtpServerInformation
+            Get-BarracudaWAFSystemNtpServerInformation
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
                         $Path -eq "/restapi/v3/system/ntp-servers" `
@@ -18,7 +18,7 @@ InModuleScope Barracuda.WAF {
         It "should retrieve a specific ntp server information parameter" {
             Mock Invoke-Api {}
             
-            Get-BarracudaWAFNtpServerInformation -Parameters 'description'
+            Get-BarracudaWAFSystemNtpServerInformation -Parameters 'description'
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
                         $Path -eq "/restapi/v3/system/ntp-servers" `
@@ -29,7 +29,7 @@ InModuleScope Barracuda.WAF {
         It "should retrieve information of a specific ntp server" {
             Mock Invoke-Api {}
 
-            Get-BarracudaWAFNtpServerInformation -SystemNTPServerName 'server1'
+            Get-BarracudaWAFSystemNtpServerInformation -SystemNTPServerName 'server1'
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
                         $Path -eq "/restapi/v3/system/ntp-servers/server1" `
