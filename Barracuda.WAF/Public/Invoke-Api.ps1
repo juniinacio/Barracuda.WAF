@@ -79,7 +79,7 @@ function Invoke-Api
             $newHeaders = $Script:DEFAULT_HEADERS.Clone()
             if ($Script:BWAF_TOKEN -ne $null) {
                 Write-Verbose "Adding authorization header..."
-                $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
+                $encodedToken = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
                 $newHeaders.Authorization = "Basic {0}" -f $encodedToken
             }
 

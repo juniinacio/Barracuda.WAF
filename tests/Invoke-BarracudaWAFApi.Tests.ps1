@@ -49,7 +49,7 @@ InModuleScope Barracuda.WAF {
                 token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
             }
 
-            $encodedToken = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
+            $encodedToken = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("{0}`r`n:" -f $Script:BWAF_TOKEN.token))
 
             Invoke-BarracudaWAFApi -Path "restapi/v3/vsites"
 
