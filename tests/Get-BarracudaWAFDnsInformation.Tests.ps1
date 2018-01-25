@@ -18,10 +18,10 @@ InModuleScope Barracuda.WAF {
         It "should retrieve a specific dns information parameter" {
             Mock Invoke-Api {}
             
-            Get-BarracudaWAFDnsInformation -Parameters 'hostname'
+            Get-BarracudaWAFDnsInformation -Parameters 'primary-dns-server'
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
-                        $Path -eq "/restapi/v3/system/local-hosts" `
+                        $Path -eq "/restapi/v3/system/dns" `
                 -and    $Method -eq 'Get'
             } -Scope It
         }
