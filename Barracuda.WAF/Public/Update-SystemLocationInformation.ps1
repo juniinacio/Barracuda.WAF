@@ -22,7 +22,7 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Update-LocationInformation {
+function Update-SystemLocationInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]

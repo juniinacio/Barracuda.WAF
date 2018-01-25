@@ -22,16 +22,31 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Remove-LocalhostInformation {
+function Update-SystemDnsInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
+        # PrimaryDnsServer help description
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [Alias('primary-dns-server')]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $PrimaryDnsServer,
+
+        # SecondaryDnsServer help description
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Alias('secondary-dns-server')]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $SecondaryDnsServer
     )
 
     process {
         try {
-            Invoke-API -Path '/restapi/v3/system/local-hosts' -Method Delete
+            $PSBoundParameters |
+                ConvertTo-PostData |
+                    Invoke-API -Path '/restapi/v3/system/dns' -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"

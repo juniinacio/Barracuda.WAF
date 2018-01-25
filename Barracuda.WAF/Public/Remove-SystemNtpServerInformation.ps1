@@ -22,36 +22,23 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function New-NtpServerInformation {
+function Remove-SystemNtpServerInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # Name help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [ValidateNotNullOrEmpty()]
-        [String]
-        $Name,
-
-        # IpAddress help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [Alias('ip-address')]
+        # SystemNTPServerName help description
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]
         [String[]]
-        $IpAddress,
-
-        # Description help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateNotNullOrEmpty()]
-        [String[]]
-        $Description
+        $SystemNTPServerName
     )
 
     process {
         try {
-            $PSBoundParameters |
-                ConvertTo-PostData |
-                    Invoke-API -Path '/restapi/v3/system/ntp-servers' -Method Post
+            foreach ($name in $SystemNTPServerName) {
+                Invoke-API -Path ('/restapi/v3/system/ntp-servers/{0}' -f $name) -Method Delete
+            }
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"

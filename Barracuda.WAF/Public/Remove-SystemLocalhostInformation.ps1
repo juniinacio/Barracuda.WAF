@@ -22,23 +22,16 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Remove-NtpServerInformation {
+function Remove-SystemLocalhostInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # SystemNTPServerName help description
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidateNotNullOrEmpty()]
-        [String[]]
-        $SystemNTPServerName
     )
 
     process {
         try {
-            foreach ($name in $SystemNTPServerName) {
-                Invoke-API -Path ('/restapi/v3/system/ntp-servers/{0}' -f $name) -Method Delete
-            }
+            Invoke-API -Path '/restapi/v3/system/local-hosts' -Method Delete
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"

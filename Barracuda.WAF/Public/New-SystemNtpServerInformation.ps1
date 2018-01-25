@@ -22,31 +22,36 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Update-DnsInformation {
+function New-SystemNtpServerInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
     Param (
-        # PrimaryDnsServer help description
+        # Name help description
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [Alias('primary-dns-server')]
         [ValidateNotNullOrEmpty()]
         [String]
-        $PrimaryDnsServer,
+        $Name,
 
-        # SecondaryDnsServer help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('secondary-dns-server')]
+        # IpAddress help description
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [Alias('ip-address')]
         [ValidateNotNullOrEmpty()]
-        [String]
-        $SecondaryDnsServer
+        [String[]]
+        $IpAddress,
+
+        # Description help description
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String[]]
+        $Description
     )
 
     process {
         try {
             $PSBoundParameters |
                 ConvertTo-PostData |
-                    Invoke-API -Path '/restapi/v3/system/dns' -Method Put
+                    Invoke-API -Path '/restapi/v3/system/ntp-servers' -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"

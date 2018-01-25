@@ -2,7 +2,7 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "New-BarracudaWAFLocalhostInformation" {
+    Describe "New-BarracudaWAFSystemLocalhostInformation" {
 
         It "should accept pipeline input" {
             Mock Invoke-Api {}
@@ -14,7 +14,7 @@ InModuleScope Barracuda.WAF {
 }
 "@          | ConvertFrom-Json
 
-            $inputObject | New-BarracudaWAFLocalhostInformation
+            $inputObject | New-BarracudaWAFSystemLocalhostInformation
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
                         $Path -eq "/restapi/v3/system/local-hosts" `

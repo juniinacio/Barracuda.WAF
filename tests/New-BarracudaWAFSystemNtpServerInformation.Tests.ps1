@@ -2,7 +2,7 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "New-BarracudaWAFNtpServerInformation" {
+    Describe "New-BarracudaWAFSystemNtpServerInformation" {
 
         It "should accept pipeline input" {
             Mock Invoke-Api {}
@@ -15,7 +15,7 @@ InModuleScope Barracuda.WAF {
 }
 "@          | ConvertFrom-Json
 
-            $inputObject | New-BarracudaWAFNtpServerInformation
+            $inputObject | New-BarracudaWAFSystemNtpServerInformation
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
                         $Path -eq "/restapi/v3/system/ntp-servers" `
@@ -28,13 +28,13 @@ InModuleScope Barracuda.WAF {
 
         It "should throw an exception when no name is given" {
 
-            {New-BarracudaWAFNtpServerInformation -Name '' -IpAddress '192.168.1.1'} | Should Throw
+            {New-BarracudaWAFSystemNtpServerInformation -Name '' -IpAddress '192.168.1.1'} | Should Throw
 
         }
 
         It "should throw an exception when no ip address is given" {
 
-            {New-BarracudaWAFNtpServerInformation -Name 'timeserver1.ntp.org' -IpAddress ''} | Should Throw
+            {New-BarracudaWAFSystemNtpServerInformation -Name 'timeserver1.ntp.org' -IpAddress ''} | Should Throw
 
         }
     }

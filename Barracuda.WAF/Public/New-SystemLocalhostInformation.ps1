@@ -22,7 +22,7 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function New-LocalhostInformation {
+function New-SystemLocalhostInformation {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]

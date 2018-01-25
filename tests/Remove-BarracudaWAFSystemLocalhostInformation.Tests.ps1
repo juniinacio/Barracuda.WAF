@@ -2,12 +2,12 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "Remove-BarracudaWAFLocalhostInformation" {
+    Describe "Remove-BarracudaWAFSystemLocalhostInformation" {
 
         It "should remove local host information" {
             Mock Invoke-Api {}
             
-            Remove-BarracudaWAFLocalhostInformation
+            Remove-BarracudaWAFSystemLocalhostInformation
 
             Assert-MockCalled Invoke-Api -ParameterFilter {
                         $Path -eq "/restapi/v3/system/local-hosts" `
