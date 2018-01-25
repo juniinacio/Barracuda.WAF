@@ -28,7 +28,13 @@ InModuleScope Barracuda.WAF {
 
         It "should throw an exception when no name is given" {
 
-            {New-BarracudaWAFNtpServerInformation -Name ''} | Should Throw
+            {New-BarracudaWAFNtpServerInformation -Name '' -IpAddress '192.168.1.1'} | Should Throw
+
+        }
+
+        It "should throw an exception when no ip address is given" {
+
+            {New-BarracudaWAFNtpServerInformation -Name 'timeserver1.ntp.org' -IpAddress ''} | Should Throw
 
         }
     }

@@ -69,23 +69,20 @@ function Update-RuleGroup {
         # RuleGroupName help description
         [Parameter(Mandatory = $true)]
         [ValidateLength(1, 64)]
-        [ValidateNotNullOrEmpty()]        
         [String]
         $RuleGroupName,
 
         # NewRuleGroupName help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateLength(1, 64)]
-        [Alias('name')]
-        [ValidateNotNullOrEmpty()]        
+        [Alias('name')] 
         [String]
         $NewRuleGroupName,
 
         # ExtendedMatch help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateLength(1, 4096)]
-        [Alias('extended-match')]
-        [ValidateNotNullOrEmpty()]        
+        [Alias('extended-match')]      
         [String]
         $ExtendedMatch,
 
