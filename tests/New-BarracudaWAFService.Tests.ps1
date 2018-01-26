@@ -24,7 +24,7 @@ InModuleScope Barracuda.WAF {
     "port": 80,
     "dps-enabled": "No",
     "type": "HTTP",
-    "azure-ip-select": "string",
+    "azure-ip-select": "Enter IP Address",
     "linked-service-name": "string"
 }         
 "@          | ConvertFrom-Json
@@ -36,13 +36,19 @@ InModuleScope Barracuda.WAF {
 
         It "should throw an exception when no name is given" {
 
-            {New-BarracudaWAFService -IpAddress '10.0.0.25' -Name '' -AzureIpSelect '10.0.0.10'} | Should Throw
+            {New-BarracudaWAFService -IpAddress '10.0.0.5' -Name '' -AzureIpSelect 'Enter IP Address'} | Should Throw
 
         }
 
         It "should throw an exception when no ip address is given" {
             
-            {New-BarracudaWAFService -IpAddress '' -Name 'http' -AzureIpSelect '10.0.0.10'} | Should Throw
+            {New-BarracudaWAFService -IpAddress '' -Name 'http' -AzureIpSelect 'Enter IP Address'} | Should Throw
+
+        }
+
+        It "should throw an exception when no azure ip address is given" {
+            
+            {New-BarracudaWAFService -IpAddress '10.0.0.5' -Name 'http' -AzureIpSelect ''} | Should Throw
 
         }
     }

@@ -128,8 +128,8 @@ function New-Service {
         $Type = 'HTTP',
 
         # AzureIpSelect help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [ValidateSet('Allocate New IP', 'System IP Address', 'Enter IP Address')]
         [Alias('azure-ip-select')]
         [String]
         $AzureIpSelect,
