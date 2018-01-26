@@ -286,12 +286,8 @@ function Update-SystemBackupInformation {
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
-                if ($_.Exception.Response.StatusCode -ne 404) {
-                    throw
-                }
-            } else {
-                throw
             }
+            throw
         }
     }
 }

@@ -166,6 +166,7 @@ function Update-Service {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
             }
+            throw
         }
     }
 }
