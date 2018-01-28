@@ -87,8 +87,8 @@ function New-Server {
 
     process {
         try {
-            $PSBoundParameters.Remove('WebApplicationName')
-            $PSBoundParameters.Remove('ServerName')
+            $PSBoundParameters.Remove('WebApplicationName') | Out-Null
+            $PSBoundParameters.Remove('ServerName') | Out-Null
 
             switch ($PSCmdlet.ParameterSetName) {
                 'IPAddress' {
