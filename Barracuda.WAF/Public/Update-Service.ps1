@@ -150,6 +150,24 @@ function Update-Service {
         $LinkedServiceName
     )
 
+    DynamicParam {
+        if (@('HTTPS', 'Instant SSL', 'Custom SSL', 'FTP SSL') -contains $Type) {
+            $certificateAttribute = New-Object -TypeName 'System.Management.Automation.ParameterAttribute'
+            $certificateAttribute.Mandatory = $true
+            $certificateAttribute.HelpMessage = "Please enter certificate name:"
+
+            $attributeCollection = New-Object -TypeName 'System.Collections.ObjectModel.Collection[System.Attribute]'
+            $attributeCollection.Add($certificateAttribute)
+
+            $certificateParameter = New-Object 'System.Management.Automation.RuntimeDefinedParameter' -ArgumentList ('Certificate', [String], $attributeCollection)
+
+            $parameterDictionary = New-Object -TypeName 'System.Management.Automation.RuntimeDefinedParameterDictionary'
+            $parameterDictionary.Add('Certificate', $certificateParameter)
+
+            return $parameterDictionary
+        }
+    }
+
     process {
         try {
             $PSBoundParameters.Remove('WebApplicationName') | Out-Null
