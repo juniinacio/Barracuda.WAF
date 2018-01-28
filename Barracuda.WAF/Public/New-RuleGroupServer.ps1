@@ -40,23 +40,23 @@ function New-RuleGroupServer {
         $RuleGroupName,
 
         # BackupServer help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [Alias('backup-server')]
         [ValidateSet('Yes', 'No')]
         [String]
         $BackupServer = 'No',
 
         # AddressVersion help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
         [Alias('address-version')]
         [ValidateSet('IPv4', 'IPv6')]
         [String]
         $AddressVersion = 'IPv4',
 
         # Status help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateSet('In Service', 'Out of Service Maintenance', 'Out of Service Sticky', 'Out of Service All')]
         [String]
         $Status = 'In Service',
@@ -75,22 +75,22 @@ function New-RuleGroupServer {
         $Hostname,
 
         # Port help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateRange(1, 65535)]
         [Int]
         $Port = 80,
 
         # Comments help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateNotNullOrEmpty()]
         [String]
         $Comments,
 
         # Weight help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateRange(1, 65535)]
         [Int]
         $Weight = 80,

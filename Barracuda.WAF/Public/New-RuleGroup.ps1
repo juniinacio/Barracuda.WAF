@@ -22,7 +22,7 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Update-RuleGroup {
+function New-RuleGroup {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
@@ -66,50 +66,43 @@ function Update-RuleGroup {
         [String]
         $Mode = 'Passive',
 
-        # RuleGroupName help description
-        [Parameter(Mandatory = $true)]
-        [ValidateLength(1, 64)]
+        # Name help description
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [ValidateLength(1, 64)] 
         [String]
-        $RuleGroupName,
-
-        # NewRuleGroupName help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateLength(1, 64)]
-        [Alias('name')] 
-        [String]
-        $NewRuleGroupName,
+        $Name,
 
         # ExtendedMatch help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateLength(1, 4096)]
-        [Alias('extended-match')]      
+        [Alias('extended-match')]
+        [ValidateLength(1, 4096)] 
         [String]
-        $ExtendedMatch,
+        $ExtendedMatch = '*',
 
         # Comments help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateNotNullOrEmpty()]        
+        [ValidateNotNullOrEmpty()]
         [String]
         $Comments,
 
         # WebFirewallPolicy help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('web-firewall-policy')]
-        [ValidateNotNullOrEmpty()]        
+        [ValidateNotNullOrEmpty()]
         [String]
         $WebFirewallPolicy,
 
         # AppId help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('app-id')]
-        [ValidateNotNullOrEmpty()]        
+        [ValidateNotNullOrEmpty()]
         [String]
         $AppId,
 
         # HostMatch help description
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('host-match')]
-        [ValidateNotNullOrEmpty()]        
+        [ValidateNotNullOrEmpty()]
         [String]
         $HostMatch
     )
@@ -117,16 +110,10 @@ function Update-RuleGroup {
     process {
         try {
             $PSBoundParameters.Remove('WebApplicationName') | Out-Null
-            $PSBoundParameters.Remove('RuleGroupName') | Out-Null
-
-            if ($PSBoundParameters.ContainsKey('NewRuleGroupName')) {
-                $PSBoundParameters['Name'] = $NewRuleGroupName
-                $PSBoundParameters.Remove('NewRuleGroupName') | Out-Null
-            }
 
             $PSBoundParameters |
                 ConvertTo-PostData |
-                    Invoke-API -Path ('/restapi/v3/services/{0}/content-rules/{1}' -f $WebApplicationName, $RuleGroupName) -Method Put
+                    Invoke-API -Path ('/restapi/v3/services/{0}/content-rules' -f $WebApplicationName) -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
