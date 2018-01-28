@@ -152,11 +152,11 @@ function Update-Service {
 
     process {
         try {
-            $PSBoundParameters.Remove('WebApplicationName')
+            $PSBoundParameters.Remove('WebApplicationName') | Out-Null
 
             if ($PSBoundParameters.ContainsKey('NewWebApplicationName')) {
                 $PSBoundParameters['Name'] = $NewWebApplicationName
-                $PSBoundParameters.Remove('NewWebApplicationName')
+                $PSBoundParameters.Remove('NewWebApplicationName') | Out-Null
             }
 
             $PSBoundParameters |

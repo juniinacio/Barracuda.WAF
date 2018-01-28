@@ -96,14 +96,14 @@ function Update-Server {
 
     process {
         try {
-            $PSBoundParameters.Remove('WebApplicationName')
-            $PSBoundParameters.Remove('ServerName')
+            $PSBoundParameters.Remove('WebApplicationName') | Out-Null
+            $PSBoundParameters.Remove('ServerName') | Out-Null
 
             if ($PSBoundParameters.ContainsKey('NewServerName')) {
                 $PSBoundParameters['Name'] = $NewServerName
             }
 
-            $PSBoundParameters.Remove('NewServerName')
+            $PSBoundParameters.Remove('NewServerName') | Out-Null
 
             $PSBoundParameters |
                 ConvertTo-PostData |

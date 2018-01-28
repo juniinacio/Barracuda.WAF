@@ -117,11 +117,11 @@ function Update-RuleGroup {
     process {
         try {
             $PSBoundParameters['Name'] = $RuleGroupName
-            $PSBoundParameters.Remove('RuleGroupName')
+            $PSBoundParameters.Remove('RuleGroupName') | Out-Null
 
             if ($PSBoundParameters.ContainsKey('NewRuleGroupName')) {
                 $PSBoundParameters['Name'] = $NewRuleGroupName
-                $PSBoundParameters.Remove('NewRuleGroupName')
+                $PSBoundParameters.Remove('NewRuleGroupName') | Out-Null
             }
 
             $PSBoundParameters |

@@ -50,7 +50,7 @@ function Set-LicenseTerms {
     
     process {
         try {
-            $PSBoundParameters.Remove("SKU")
+            $PSBoundParameters.Remove("SKU") | Out-Null
 
             switch ($SKU) {
                 Default {

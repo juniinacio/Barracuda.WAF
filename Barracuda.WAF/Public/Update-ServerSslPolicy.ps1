@@ -105,6 +105,9 @@ function Update-ServerSslPolicy {
 
     process {
         try {
+            $PSBoundParameters.Remove('WebApplicationName') | Out-Null
+            $PSBoundParameters.Remove('WebServerName') | Out-Null
+
             $PSBoundParameters |
                 ConvertTo-PostData |
                     Invoke-API -Path ('/restapi/v3/services/{0}/servers/{1}/ssl-policy' -f $WebApplicationName, $WebServerName) -Method Put
