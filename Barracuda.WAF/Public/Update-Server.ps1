@@ -41,27 +41,23 @@ function Update-Server {
         [String]
         $ServerName,
 
-        # Identifier help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateSet('IP Address', 'Hostname')]
-        [String]
-        $Identifier = 'IP Address',
-
         # AddressVersion help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
         [ValidateSet('IPv4', 'IPv6')]
         [Alias('address-version')]
         [String]
         $AddressVersion = 'IPv4',
 
         # AddressVersion help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateSet('In Service', 'Out of Service Maintenance', 'Out of Service Sticky', 'Out of Service All')]
         [String]
         $Status = 'In Service',
 
         # NewServerName help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1, 255)]
         [Alias('name')]
@@ -69,26 +65,28 @@ function Update-Server {
         $NewServerName,
 
         # IPAddress help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
         [ValidateNotNullOrEmpty()]
         [Alias('ip-address')]
         [String]
         $IpAddress,
 
         # Hostname help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateNotNullOrEmpty()]
         [String]
         $Hostname,
 
         # Port help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateRange(1, 65535)]
         [Int]
         $Port = 80,
 
         # Comments help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateNotNullOrEmpty()]
         [String]
         $Comments = 'Comments'
@@ -101,9 +99,21 @@ function Update-Server {
 
             if ($PSBoundParameters.ContainsKey('NewServerName')) {
                 $PSBoundParameters['Name'] = $NewServerName
+
+                $PSBoundParameters.Remove('NewServerName') | Out-Null
+            } else {
+                $PSBoundParameters['Name'] = $ServerName
             }
 
-            $PSBoundParameters.Remove('NewServerName') | Out-Null
+            switch ($PSCmdlet.ParameterSetName) {
+                'IPAddress' {
+                    $PSBoundParameters.Identifier = 'IP Address'
+                }
+
+                'Hostname' {
+                    $PSBoundParameters.Identifier = 'Hostname'
+                }
+            }
 
             $PSBoundParameters |
                 ConvertTo-PostData |
