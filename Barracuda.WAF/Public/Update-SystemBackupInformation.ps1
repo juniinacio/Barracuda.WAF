@@ -55,7 +55,7 @@ function Update-SystemBackupInformation {
         $AzureStorageAccountName,
 
         # AzureStorageBlobPath help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'SetBackupDestinatioSettingsToAzureStorageAccount')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'SetBackupDestinatioSettingsToAzureStorageAccount')]
         [Alias('azure-storage-blob-path')]
         [ValidateNotNullOrEmpty()]
         [String]
