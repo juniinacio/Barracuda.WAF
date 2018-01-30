@@ -50,3 +50,10 @@ To view all cmdlets, enter:
 ```powershell
 Get-Command -Module Barracuda.WAF
 ```
+
+### Developing and Contributing ###
+Thank you for considering contributing to the Barracuda.WAF! I haven't created any contribution guide yet, but requests are welcome. I will try to implement the full v3 api specification of the WAF. But because this module is being develop in support for a project I am currently working on for a customer of my company. Only the needed feature will get priority and everything else will be added when I get free time.
+
+So if you find this module useful please contribute.
+
+If you have any problems, please file a new issue and I will try to get back to you as soon as possible.

@@ -26,7 +26,7 @@ InModuleScope Barracuda.WAF {
 
         It "should throw an exception when no primary dns server is given" {
 
-            {New-BarracudaWAFService -PrimaryDnsServer '' -SecondaryDnsServer '8.8.8.8' } | Should Throw
+            {Update-BarracudaWAFSystemDnsInformation -PrimaryDnsServer '' -SecondaryDnsServer '8.8.8.8' } | Should Throw
 
         }
     }
