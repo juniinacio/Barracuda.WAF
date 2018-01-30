@@ -164,6 +164,19 @@ function Update-Service {
             $parameterDictionary = New-Object -TypeName 'System.Management.Automation.RuntimeDefinedParameterDictionary'
             $parameterDictionary.Add('Certificate', $certificateParameter)
 
+            if ($Type -eq 'Instant SSL') {
+                $secureSiteDomainAttribute = New-Object -TypeName 'System.Management.Automation.ParameterAttribute'
+                $secureSiteDomainAttribute.Mandatory = $true
+                $secureSiteDomainAttribute.HelpMessage = "Please enter domain name:"
+
+                $attributeCollection = New-Object -TypeName 'System.Collections.ObjectModel.Collection[System.Attribute]'
+                $attributeCollection.Add($secureSiteDomainAttribute)
+
+                $secureSiteDomainParameter = New-Object 'System.Management.Automation.RuntimeDefinedParameter' -ArgumentList ('SecureSiteDomain', [String], $attributeCollection)
+
+                $parameterDictionary.Add('SecureSiteDomain', $secureSiteDomainParameter)
+            }
+
             return $parameterDictionary
         }
     }
