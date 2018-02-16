@@ -89,8 +89,8 @@ function Update-RuleGroupServer {
         $Port = 80,
 
         # Comments help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateNotNullOrEmpty()]
         [String]
         $Comments,
