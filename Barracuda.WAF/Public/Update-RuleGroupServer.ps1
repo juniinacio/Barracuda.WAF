@@ -46,30 +46,30 @@ function Update-RuleGroupServer {
         $WebServerName,
 
         # BackupServer help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [Alias('backup-server')]
         [ValidateSet('Yes', 'No')]
         [String]
         $BackupServer = 'No',
 
         # AddressVersion help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
         [Alias('address-version')]
         [ValidateSet('IPv4', 'IPv6')]
         [String]
         $AddressVersion = 'IPv4',
 
         # Status help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [ValidateSet('In Service', 'Out of Service Maintenance', 'Out of Service Sticky', 'Out of Service All')]
         [String]
         $Status = 'In Service',
 
         # NewWebServerName help description
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'IPAddress')]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Hostname')]
         [Alias('name')]
         [ValidateLength(1, 255)] 
         [String]
@@ -116,8 +116,12 @@ function Update-RuleGroupServer {
             $PSBoundParameters.Remove('RuleGroupName') | Out-Null
             $PSBoundParameters.Remove('WebServerName') | Out-Null
 
-            $PSBoundParameters.name = $NewWebServerName
-            $PSBoundParameters.Remove('NewWebServerName') | Out-Null
+            $PSBoundParameters.name = $WebServerName
+
+            if ($PSBoundParameters.ContainsKey('WebServerName')) {
+                $PSBoundParameters.name = $NewWebServerName
+                $PSBoundParameters.Remove('NewWebServerName') | Out-Null
+            }
 
             switch ($PSCmdlet.ParameterSetName) {
                 'IPAddress' {
