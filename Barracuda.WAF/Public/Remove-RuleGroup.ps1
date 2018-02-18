@@ -34,7 +34,7 @@ function Remove-RuleGroup {
         $WebApplicationName,
 
         # RuleGroupName help description
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]        
         [String[]]
         $RuleGroupName
