@@ -118,7 +118,7 @@ function Update-RuleGroupServer {
 
             $PSBoundParameters.name = $WebServerName
 
-            if ($PSBoundParameters.ContainsKey('WebServerName')) {
+            if ($PSBoundParameters.ContainsKey('NewWebServerName')) {
                 $PSBoundParameters.name = $NewWebServerName
                 $PSBoundParameters.Remove('NewWebServerName') | Out-Null
             }
