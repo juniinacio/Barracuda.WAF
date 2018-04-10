@@ -1,1 +1,3 @@
 test.ps1
+*.csv
+*.bak
