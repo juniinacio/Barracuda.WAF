@@ -42,7 +42,7 @@ InModuleScope Barracuda.WAF {
         It "should support groups query string parameter" {
             Mock Invoke-Api {}
 
-            $groups = @('Request Limits', 'URL Normalization', 'Parameter Protection')
+            $groups = @('Request Limits', 'URL Normalization', 'Parameter Protection', 'Cookie Security', 'Cloaking', 'URL Protection', 'Security Policy')
             
             Get-BarracudaWAFSecurityPolicy -PolicyName 'default' -Groups $groups
 

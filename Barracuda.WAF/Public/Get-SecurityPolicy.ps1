@@ -35,7 +35,7 @@ function Get-SecurityPolicy {
 
         # Groups help description
         [Parameter(Mandatory = $false)]
-        [ValidateSet('Request Limits', 'URL Normalization', 'Parameter Protection')]
+        [ValidateSet('Request Limits', 'URL Normalization', 'Parameter Protection', 'Cookie Security', 'Cloaking', 'URL Protection', 'Security Policy')]
         [String[]]
         $Groups,
 
