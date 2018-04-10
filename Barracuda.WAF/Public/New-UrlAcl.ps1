@@ -68,7 +68,7 @@ function New-UrlAcl {
         $DenyResponse,
 
         # Name help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateLength(1, 64)]
         [String]
         $Name,
