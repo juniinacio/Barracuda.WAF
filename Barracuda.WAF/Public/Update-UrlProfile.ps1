@@ -69,7 +69,7 @@ function Update-UrlProfile {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('exception-patterns')]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [String[]]
         $ExceptionPatterns,
 
         # ExtendedMatch help description
@@ -83,7 +83,7 @@ function Update-UrlProfile {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('allowed-methods')]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [String[]]
         $AllowedMethods,
 
         # DisplayName help description
@@ -103,7 +103,7 @@ function Update-UrlProfile {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('allowed-content-types')]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [String[]]
         $AllowedContentTypes,
 
         # MaxContentLength help description
@@ -124,7 +124,7 @@ function Update-UrlProfile {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('custom-blocked-attack-types')]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [String[]]
         $CustomBlockedAttackTypes,
 
         # AllowQueryString help description
@@ -145,14 +145,14 @@ function Update-UrlProfile {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('referrers-for-the-url-profile')]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [String[]]
         $ReferrersForTheUrlProfile,
 
         # BlockedAttackTypes help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias('blocked-attack-types')]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [String[]]
         $BlockedAttackTypes,
 
         # Comment help description
