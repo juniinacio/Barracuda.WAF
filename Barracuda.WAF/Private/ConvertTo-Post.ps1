@@ -20,7 +20,7 @@
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
 #>
-function ConvertTo-PostData {
+function ConvertTo-Post {
     [CmdletBinding()]
     [OutputType([Hashtable])]
     Param (

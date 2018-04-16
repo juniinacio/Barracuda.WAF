@@ -209,7 +209,7 @@ $trustedServerCertificateFileContent
                 }
 
                 'CreateSelfsignedCertificates' {
-                    $postData = $PSBoundParameters | ConvertTo-PostData -Separator '_'
+                    $postData = $PSBoundParameters | ConvertTo-Post -Separator '_'
                 }
 
                 'UploadTrustedCACertificates' {

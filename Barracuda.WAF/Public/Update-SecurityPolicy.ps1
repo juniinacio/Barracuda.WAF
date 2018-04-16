@@ -48,7 +48,7 @@ function Update-SecurityPolicy {
             $PSBoundParameters.name = $NewName
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/security-policies/{0}' -f $PolicyName) -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

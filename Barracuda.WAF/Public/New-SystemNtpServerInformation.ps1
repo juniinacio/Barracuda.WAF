@@ -50,7 +50,7 @@ function New-SystemNtpServerInformation {
     process {
         try {
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/system/ntp-servers' -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

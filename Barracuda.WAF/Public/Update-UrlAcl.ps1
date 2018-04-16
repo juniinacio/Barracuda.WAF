@@ -145,7 +145,7 @@ function Update-UrlAcl {
             }
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/url-acls/{1}' -f $WebApplicationName, $URLACLName) -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

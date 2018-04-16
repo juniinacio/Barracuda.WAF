@@ -281,7 +281,7 @@ function Update-SystemBackupInformation {
             }
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/backup' -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

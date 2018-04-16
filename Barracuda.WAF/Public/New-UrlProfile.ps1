@@ -174,7 +174,7 @@ function New-UrlProfile {
             $PSBoundParameters.Remove('WebApplicationName') | Out-Null
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/url-profiles' -f $WebApplicationName) -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

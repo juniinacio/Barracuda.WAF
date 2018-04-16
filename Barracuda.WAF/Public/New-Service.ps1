@@ -176,7 +176,7 @@ function New-Service {
     process {
         try {
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/services' -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

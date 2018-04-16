@@ -103,7 +103,7 @@ function New-Server {
             $PSBoundParameters['Name'] = $ServerName
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/servers' -f $WebApplicationName) -Method Post
 
         } catch {

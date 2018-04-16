@@ -134,7 +134,7 @@ function Update-RuleGroupServer {
             }
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/content-rules/{1}/content-rule-servers/{2}' -f $WebApplicationName, $RuleGroupName, $WebServerName) -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

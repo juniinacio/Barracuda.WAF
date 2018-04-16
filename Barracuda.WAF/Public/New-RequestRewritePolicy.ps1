@@ -97,7 +97,7 @@ function New-RequestRewritePolicy {
             $PSBoundParameters.Remove('WebApplicationName') | Out-Null
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/http-request-rewrite-rules' -f $WebApplicationName) -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

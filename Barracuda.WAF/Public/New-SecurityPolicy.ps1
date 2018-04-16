@@ -44,7 +44,7 @@ function New-SecurityPolicy {
     process {
         try {
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/security-policies' -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

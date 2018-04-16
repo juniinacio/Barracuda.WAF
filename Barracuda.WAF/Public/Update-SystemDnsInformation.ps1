@@ -45,7 +45,7 @@ function Update-SystemDnsInformation {
     process {
         try {
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/system/dns' -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

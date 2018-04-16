@@ -96,7 +96,7 @@ function Update-SystemInformation {
     process {
         try {
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/system' -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

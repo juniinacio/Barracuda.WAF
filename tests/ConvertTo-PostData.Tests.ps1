@@ -2,7 +2,7 @@
 Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barracuda.WAF.psd1') -Force
 
 InModuleScope Barracuda.WAF {
-    Describe "ConvertTo-PostData" {
+    Describe "ConvertTo-Post" {
 
         It "should convert camel case to snake case" {
 
@@ -10,7 +10,7 @@ InModuleScope Barracuda.WAF {
                 IpAddress = 'string'
             }
 
-            $outputObject = $inputObject | ConvertTo-PostData
+            $outputObject = $inputObject | ConvertTo-Post
 
             ($outputObject.Keys -ccontains 'ip-address') | Should Be $true
             
@@ -22,7 +22,7 @@ InModuleScope Barracuda.WAF {
                 VSite = 'string'
             }
 
-            $outputObject = $inputObject | ConvertTo-PostData
+            $outputObject = $inputObject | ConvertTo-Post
 
             ($outputObject.Keys -ccontains 'vsite') | Should Be $true
             
@@ -34,7 +34,7 @@ InModuleScope Barracuda.WAF {
                 VSite = 'string'
             }
 
-            $outputObject = $inputObject | ConvertTo-PostData -IgnoreProperty 'VSite'
+            $outputObject = $inputObject | ConvertTo-Post -IgnoreProperty 'VSite'
 
             ($outputObject.Keys -ccontains 'vsite') | Should Be $true
             
@@ -46,7 +46,7 @@ InModuleScope Barracuda.WAF {
                 Verbose = $true
             }
 
-            $outputObject = $inputObject | ConvertTo-PostData -IgnoreProperty 'VSite'
+            $outputObject = $inputObject | ConvertTo-Post -IgnoreProperty 'VSite'
 
             ($outputObject.Keys -notcontains 'verbose') | Should Be $true
             

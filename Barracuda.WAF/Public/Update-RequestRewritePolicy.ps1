@@ -110,7 +110,7 @@ function Update-RequestRewritePolicy {
             }
 
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/http-request-rewrite-rules/{1}' -f $WebApplicationName, $RuleName) -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {

@@ -44,7 +44,7 @@ function New-SystemLocalhostInformation {
     process {
         try {
             $PSBoundParameters |
-                ConvertTo-PostData |
+                ConvertTo-Post |
                     Invoke-API -Path '/restapi/v3/system/local-hosts' -Method Post
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
