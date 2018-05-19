@@ -182,6 +182,10 @@ function Update-ServiceSslSecurity {
         try {
             $PSBoundParameters.Remove('WebApplicationName') | Out-Null
 
+            if ($PSBoundParameters.ContainsKey('SelectedCiphers')) {
+                $PSBoundParameters.SelectedCiphers = @($PSBoundParameters.SelectedCiphers -join ',')
+            }
+
             $PSBoundParameters |
                 ConvertTo-Post |
                     Invoke-API -Path ('/restapi/v3/services/{0}/ssl-security' -f $WebApplicationName) -Method Put
