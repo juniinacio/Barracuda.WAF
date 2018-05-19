@@ -34,11 +34,11 @@ InModuleScope Barracuda.WAF {
                 -and    $PostData."max-request-length" -eq 0 `
                 -and    $PostData."max-number-of-headers" -eq 0 `
                 -and    $PostData."max-cookie-value-length" -eq 0 `
-                # -and    $PostData."max-query-length" -eq 0 `
-                # -and    $PostData."max-url-length" -eq 0 `
-                # -and    $PostData."max-request-line-length" -eq 0 `
-                # -and    $PostData."max-header-value-length" -eq 0 `
-                # -and    $PostData."max-cookie-name-length" -eq 0 `
+                -and    $PostData."max-query-length" -eq 0 `
+                -and    $PostData."max-url-length" -eq 0 `
+                -and    $PostData."max-request-line-length" -eq 0 `
+                -and    $PostData."max-header-value-length" -eq 0 `
+                -and    $PostData."max-cookie-name-length" -eq 0 `
             } -Scope It
         }
     }

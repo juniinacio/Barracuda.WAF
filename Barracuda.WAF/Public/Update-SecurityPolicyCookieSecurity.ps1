@@ -22,7 +22,7 @@
 .LINK
     https://campus.barracuda.com/product/webapplicationfirewall/api/9.1.1
 #>
-function Update-SecurityPolicyRequestLimits {
+function Update-SecurityPolicyCookieSecurity {
     [CmdletBinding()]
     [Alias()]
     [OutputType([PSCustomObject])]
@@ -33,71 +33,67 @@ function Update-SecurityPolicyRequestLimits {
         [String]
         $PolicyName,
 
-        # MaxNumberOfCookies help description
+        # CookieReplayProtectionType help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-number-of-cookies')]
-        [Int]
-        $MaxNumberOfCookies,
+        [ValidateSet('None', 'IP', 'Custom Headers', 'IP and Custom Headers')]
+        [Alias('cookie-replay-protection-type')]
+        [String]
+        $CookieReplayProtectionType = 'IP',
 
-        # MaxHeaderNameLength help description
+        # CustomHeaders help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-header-name-length')]
-        [Int]
-        $MaxHeaderNameLength,
+        [ValidateNotNullOrEmpty()]
+        [Alias('custom-headers')]
+        [String[]]
+        $CustomHeaders,
 
-        # Enable help description
+        # SecureCookie help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('Yes', 'No')]
+        [Alias('secure-cookie')]
         [String]
-        $Enable = 'Yes',
+        $SecureCookie = 'No',
 
-        # MaxRequestLength help description
+        # HttpOnly help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-request-length')]
-        [Int]
-        $MaxRequestLength,
+        [ValidateSet('Yes', 'No')]
+        [Alias('http-only')]
+        [String]
+        $HttpOnly = 'No',
 
-        # MaxNumberOfHeaders help description
+        # TamperProofMode help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-number-of-headers')]
-        [Int]
-        $MaxNumberOfHeaders,
+        [ValidateSet('Encrypted', 'Signed', 'None')]
+        [Alias('tamper-proof-mode')]
+        [String]
+        $TamperProofMode,
 
-        # NaxCookieValueLength help description
+        # CookieMaxAge help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-cookie-value-length')]
+        [ValidateRange(0, 500000)]
+        [Alias('cookie-max-age')]
         [Int]
-        $MaxCookieValueLength,
+        $CookieMaxAge = 1440,
 
-        # MaxQueryLength help description
+        # CookiesExempted help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-query-length')]
-        [Int]
-        $MaxQueryLength,
+        [ValidateNotNullOrEmpty()]
+        [Alias('cookies-exempted')]
+        [String[]]
+        $CookiesExempted,
 
-        # MaxUrlLength help description
+        # AllowUnrecognizedCookies help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-url-length')]
-        [Int]
-        $MaxUrlLength,
+        [ValidateSet('Never', 'Always', 'Custom')]
+        [Alias('allow-unrecognized-cookies')]
+        [String]
+        $AllowUnrecognizedCookies,
 
-        # MaxRequestLineLength help description
+        # DaysAllowed help description
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-request-line-length')]
+        [Alias('days-allowed')]
         [Int]
-        $MaxRequestLineLength,
-
-        # MaxHeaderValueLength help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-header-value-length')]
-        [Int]
-        $MaxHeaderValueLength,
-
-        # MaxCookieNameLength help description
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias('max-cookie-name-length')]
-        [Int]
-        $MaxCookieNameLength
+        $DaysAllowed = 7
     )
 
     process {
@@ -106,7 +102,7 @@ function Update-SecurityPolicyRequestLimits {
 
             $PSBoundParameters |
                 ConvertTo-Post |
-                    Invoke-API -Path ('/restapi/v3/security-policies/{0}/request-limits' -f $PolicyName) -Method Put
+                    Invoke-API -Path ('/restapi/v3/security-policies/{0}/cookie-security' -f $PolicyName) -Method Put
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
