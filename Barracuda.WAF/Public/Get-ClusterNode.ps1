@@ -29,7 +29,7 @@ function Get-ClusterNode {
     Param (
         # Fields help description
         [Parameter(Mandatory = $false)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateSet('ip-address', 'mode', 'serial')]
         [String[]]
         $Fields
     )
