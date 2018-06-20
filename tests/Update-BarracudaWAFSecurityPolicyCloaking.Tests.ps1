@@ -10,8 +10,8 @@ InModuleScope Barracuda.WAF {
             $inputObject = @"
 {
     "filter-response-header": "Yes",
-    "return-codes-to-exempt": [500,404],
-    "headers-to-filter": [1],
+    "return-codes-to-exempt": 500,
+    "headers-to-filter": 1,
     "suppress-return-code": "Yes"
 }
 "@          | ConvertFrom-Json
@@ -22,8 +22,8 @@ InModuleScope Barracuda.WAF {
                         $Path -eq "/restapi/v3/security-policies/default/cloaking" `
                 -and    $Method -eq "Put" `
                 -and    $PostData."filter-response-header" -eq "Yes" `
-                # -and    $PostData."return-codes-to-exempt" -eq "string" `
-                # -and    $PostData."headers-to-filter" -eq "1" `
+                -and    $PostData."return-codes-to-exempt" -eq "500" `
+                -and    $PostData."headers-to-filter" -eq "1" `
                 -and    $PostData."suppress-return-code" -eq "Yes" `
             } -Scope It
         }
