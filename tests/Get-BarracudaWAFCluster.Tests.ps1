@@ -4,7 +4,7 @@ Import-Module $(Join-Path -Path $PSScriptRoot -ChildPath '../Barracuda.WAF/Barra
 InModuleScope Barracuda.WAF {
     Describe "Get-BarracudaWAFCluster" {
 
-        It "should retrieve information of security policy cloaking" {
+        It "should retrieve information of cluster" {
             Mock Invoke-Api {}
 
             Get-BarracudaWAFCluster
