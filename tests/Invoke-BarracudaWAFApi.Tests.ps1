@@ -69,5 +69,19 @@ InModuleScope Barracuda.WAF {
 
             Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/system?parameters=cluster_shared_secret" -and $Headers.ContainsKey('Authorization') }
         }
+
+        It "should add the time out seconds parameter" {
+            Mock Invoke-RestMethod {}
+
+            $Script:BWAF_TOKEN = [PSCustomObject]@{
+                token = "eyJldCI6IjEzODAyMzE3NTciLCJwYXNzd29yZCI6ImY3NzY2ZTFmNTgwMzgyNmE1YTAzZWZlMzcy\nYzgzOTMyIiwidXNlciI6ImFkbWluIn0="
+            }
+            
+            Invoke-BarracudaWAFApi -Path '/restapi/v3/system' -Parameters @{
+                parameters = 'cluster_shared_secret'
+            } -TimeoutSec 10
+
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter { $Uri -eq "https://waf1.com/restapi/v3/system?parameters=cluster_shared_secret" -and $TimeoutSec -eq 10 }
+        }
     }
 }

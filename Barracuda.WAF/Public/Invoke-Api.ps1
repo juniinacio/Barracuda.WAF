@@ -48,10 +48,15 @@ function Invoke-Api
         [Microsoft.PowerShell.Commands.WebRequestMethod]
         $Method = [Microsoft.PowerShell.Commands.WebRequestMethod]::Default,
 
-        # Paramaters help description
+        # Headers help description
         [Parameter(Mandatory=$false)]
         [Hashtable]
-        $Headers
+        $Headers,
+
+        # TimeoutSec help description
+        [Parameter(Mandatory=$false)]
+        [Int]
+        $TimeoutSec = 0
     )
 
     process
@@ -112,7 +117,13 @@ function Invoke-Api
             }
             
             if ($PSBoundParameters.ContainsKey('Method')) {
+                Write-Verbose "Setting request method to $Method`..."
                 $requestParameters.Method = $Method
+            }
+
+            if ($PSBoundParameters.ContainsKey('TimeoutSec')) {
+                Write-Verbose "Setting time out to $TimeoutSec`..."
+                $requestParameters.TimeoutSec = $TimeoutSec
             }
             
             Invoke-RestMethod @requestParameters

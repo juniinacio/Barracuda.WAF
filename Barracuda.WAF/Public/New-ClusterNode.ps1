@@ -32,14 +32,25 @@ function New-ClusterNode {
         [ValidateNotNullOrEmpty()]
         [Alias('ip-address')]
         [String]
-        $IpAddress
+        $IpAddress,
+
+        # TimeoutSec help description
+        [Parameter(Mandatory=$false)]
+        [Int]
+        $TimeoutSec = 0
     )
 
     process {
         try {
+            $PSBoundParameters.Remove('TimeoutSec') | Out-Null
+
+            if (-not $PSBoundParameters.ContainsKey('TimeoutSec')) {
+                $TimeoutSec = 0
+            }
+
             $PSBoundParameters |
                 ConvertTo-Post |
-                Invoke-API -Path '/restapi/v3/cluster/nodes' -Method Post
+                    Invoke-API -Path '/restapi/v3/cluster/nodes' -Method Post -TimeoutSec $TimeoutSec
         } catch {
             if ($_.Exception -is [System.Net.WebException]) {
                 Write-Verbose "ExceptionResponse: `n$($_ | Get-ExceptionResponse)`n"
